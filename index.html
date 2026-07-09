@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            /* พื้นหลังธีมศาลยุติธรรม/กฎหมาย (สามารถเปลี่ยน URL รูปภาพได้) */
+            /* พื้นหลังธีมศาลยุติธรรม/กฎหมาย */
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-attachment: fixed;
@@ -18,30 +18,44 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body class="text-gray-100 min-h-screen p-8">
+<body class="text-gray-100 min-h-screen p-4 md:p-8">
 
     <div class="max-w-6xl mx-auto bg-white text-gray-800 rounded-xl shadow-2xl overflow-hidden opacity-95">
-        <div class="p-8 bg-amber-800 text-white flex justify-between items-center">
-            <h1 class="text-3xl font-semibold">🏛️ ตารางนัดพิจารณาคดีศาล</h1>
-            <p class="text-sm">ข้อมูลอัปเดตล่าสุด: วันนี้</p>
+        <div class="p-6 md:p-8 bg-amber-800 text-white flex flex-col md:flex-row justify-between items-center gap-4">
+            <h1 class="text-2xl md:text-3xl font-semibold text-center md:text-left">🏛️ ตารางนัดพิจารณาคดีศาล</h1>
+            <p id="lastUpdateText" class="text-sm bg-amber-900 px-4 py-2 rounded-full shadow-inner">กำลังดึงข้อมูล...</p>
         </div>
 
-        <div class="p-8">
-            <div class="mb-6 flex gap-4">
-                <input type="text" id="searchInput" placeholder="ค้นหาเลขคดีดำ, ห้องพิจารณา, หรือสาเหตุ..." 
-                       class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600">
-                <button onclick="searchData()" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-3 rounded-lg font-semibold transition">
-                    ค้นหา
-                </button>
+        <div class="p-6 md:p-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+                <div class="flex items-center gap-4 bg-gray-100 p-2 rounded-lg w-full md:w-auto justify-center shadow-inner">
+                    <button id="btnPrev" onclick="changeDay(-1)" class="p-2 bg-white rounded shadow hover:bg-gray-200 disabled:opacity-50 transition">
+                        ◀ ย้อนหลัง
+                    </button>
+                    <div id="currentDateDisplay" class="font-bold text-amber-800 text-lg min-w-[150px] text-center">
+                        กำลังโหลด...
+                    </div>
+                    <button id="btnNext" onclick="changeDay(1)" class="p-2 bg-white rounded shadow hover:bg-gray-200 disabled:opacity-50 transition">
+                        ถัดไป ▶
+                    </button>
+                </div>
+
+                <div class="flex gap-2 w-full md:w-auto flex-1">
+                    <input type="text" id="searchInput" placeholder="ค้นหาเลขคดี, ห้องพิจารณา..." 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600">
+                    <button onclick="searchData()" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap">
+                        ค้นหา
+                    </button>
+                </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+            <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+                <table class="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
-                            <th class="p-4 border-b">เลขคดีดำ</th>
-                            <th class="p-4 border-b">เวลานัด</th>
-                            <th class="p-4 border-b">ห้องพิจารณาคดี</th>
+                            <th class="p-4 border-b whitespace-nowrap">เลขคดีดำ</th>
+                            <th class="p-4 border-b whitespace-nowrap">เวลานัด</th>
+                            <th class="p-4 border-b whitespace-nowrap">ห้องพิจารณาคดี</th>
                             <th class="p-4 border-b">สาเหตุที่นัด</th>
                         </tr>
                     </thead>
@@ -53,72 +67,139 @@
     </div>
 
     <script>
-        // กำหนด URL ของ Google Apps Script Web App (รอคุณเอาสคริปต์ไป Deploy ก่อน)
+        // ⚠️ นำ URL ของ Apps Script ที่ Deploy ไว้มาใส่ตรงนี้
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxl0ahOtYzgNNw7cozjkWmLxv31C53mzz-pAmuthElYErh8-R2oSPULr1DXplEmu5vu/exec';
-        let caseData = [];
+        
+        let allCaseData = [];       // เก็บข้อมูลทั้งหมดที่ดึงมา
+        let availableDates = [];    // เก็บรายชื่อวันที่ทั้งหมดที่มีในระบบ
+        let currentDateIndex = 0;   // เก็บตำแหน่งหน้าที่กำลังดูอยู่
+        let currentFilteredData = []; // เก็บข้อมูลเฉพาะของวันนั้นๆ เพื่อให้ค้นหาได้ถูกต้อง
 
         async function fetchData() {
             Swal.fire({
                 title: 'กำลังโหลดข้อมูล...',
-                text: 'กรุณารอสักครู่ ระบบกำลังดึงข้อมูลนัดหมาย',
+                text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมาย',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             try {
-                // TODO: เมื่อสร้าง Backend เสร็จ ให้เปลี่ยน URL ตรงนี้
+                // TODO: ลบ Comment ออกเมื่อพร้อมเชื่อมต่อ Google Sheets จริง
                 /*
                 const response = await fetch(GAS_URL);
-                caseData = await response.json();
+                allCaseData = await response.json();
                 */
                
-                // Mock Data ไปก่อนระหว่างรอ Backend
-                caseData = [
-                    { blackCaseNo: "อ.123/2569", time: "09:00", room: "ห้องพิจารณา 1", cause: "สืบพยานโจทก์" },
-                    { blackCaseNo: "ผบ.456/2569", time: "13:30", room: "ห้องพิจารณา 3", cause: "ไกล่เกลี่ย" }
+                // ข้อมูลจำลอง (Mock Data) สำหรับการทดสอบ UI เบื้องต้น
+                allCaseData = [
+                    { blackCaseNo: "อ.111/2569", appointDate: "09/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่1", cause: "สืบพยานโจทก์" },
+                    { blackCaseNo: "อ.222/2569", appointDate: "09/07/2569", time: "10.30", room: "ห้องพิจารณาคดีที่2", cause: "ไกล่เกลี่ย" },
+                    { blackCaseNo: "ผบ.333/2569", appointDate: "10/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่3", cause: "ฟังคำพิพากษา" },
+                    { blackCaseNo: "ม.444/2569", appointDate: "12/07/2569", time: "13.30", room: "ห้องพิจารณาคดีที่1", cause: "นัดไต่สวนมูลฟ้อง" }
                 ];
 
-                renderTable(caseData);
+                // กรองหาวันที่ที่ไม่ซ้ำกัน (Unique Dates) และเรียงลำดับ
+                availableDates = [...new Set(allCaseData.map(item => item.appointDate))].filter(Boolean);
+                
+                if (availableDates.length > 0) {
+                    currentDateIndex = 0; // เริ่มต้นที่วันแรกสุดที่มีข้อมูล
+                    updateUIForCurrentDate();
+                    
+                    // แสดงเวลาที่อัปเดตข้อมูล
+                    const now = new Date();
+                    document.getElementById('lastUpdateText').innerText = `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH')}`;
+                } else {
+                    document.getElementById('currentDateDisplay').innerText = "ไม่พบข้อมูลนัดหมาย";
+                    document.getElementById('btnPrev').disabled = true;
+                    document.getElementById('btnNext').disabled = true;
+                    document.getElementById('lastUpdateText').innerText = "ไม่มีข้อมูล";
+                    renderTable([]);
+                }
+
                 Swal.close();
             } catch (error) {
-                Swal.fire('ข้อผิดพลาด!', 'ไม่สามารถดึงข้อมูลได้', 'error');
+                Swal.fire('ข้อผิดพลาด!', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
                 console.error("Fetch Error:", error);
             }
         }
 
+        // ฟังก์ชันอัปเดตหน้าจอเมื่อเปลี่ยนวัน
+        function updateUIForCurrentDate() {
+            const targetDate = availableDates[currentDateIndex];
+            
+            // อัปเดตข้อความวันที่บนปุ่ม
+            document.getElementById('currentDateDisplay').innerText = `📅 ${targetDate}`;
+            
+            // ปิด/เปิด ปุ่มย้อนหลัง-ถัดไป ตามจำนวนวันที่มี
+            document.getElementById('btnPrev').disabled = (currentDateIndex === 0);
+            document.getElementById('btnNext').disabled = (currentDateIndex === availableDates.length - 1);
+
+            // กรองข้อมูลทั้งหมด ให้เหลือเฉพาะวันที่กำลังเลือกดู
+            currentFilteredData = allCaseData.filter(item => item.appointDate === targetDate);
+            
+            // เคลียร์ช่องค้นหาและแสดงผลตาราง
+            document.getElementById('searchInput').value = '';
+            renderTable(currentFilteredData);
+        }
+
+        // ฟังก์ชันขยับวัน (1 = ถัดไป, -1 = ย้อนหลัง)
+        function changeDay(step) {
+            const newIndex = currentDateIndex + step;
+            // ป้องกันไม่ให้ index เกินขอบเขตที่มี
+            if (newIndex >= 0 && newIndex < availableDates.length) {
+                currentDateIndex = newIndex;
+                updateUIForCurrentDate();
+            }
+        }
+
+        // ฟังก์ชันค้นหา (จากข้อมูลของวันที่เลือกอยู่เท่านั้น)
+        function searchData() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (keyword === "") {
+                renderTable(currentFilteredData);
+                return;
+            }
+
+            const filtered = currentFilteredData.filter(item => 
+                (item.blackCaseNo && item.blackCaseNo.toLowerCase().includes(keyword)) ||
+                (item.room && item.room.toLowerCase().includes(keyword)) ||
+                (item.cause && item.cause.toLowerCase().includes(keyword))
+            );
+            renderTable(filtered);
+        }
+
+        // เพิ่มการกด Enter ในช่องค้นหา
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchData();
+            }
+        });
+
+        // ฟังก์ชันวาดตาราง
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
             
             if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">ไม่พบข้อมูล</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-8 text-gray-500">ไม่มีนัดพิจารณาคดีในวันนี้ หรือไม่พบข้อมูลที่ค้นหา</td></tr>';
                 return;
             }
 
             data.forEach(item => {
                 const row = `
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="p-4 font-semibold text-amber-700">${item.blackCaseNo}</td>
-                        <td class="p-4">${item.time}</td>
-                        <td class="p-4">${item.room}</td>
-                        <td class="p-4">${item.cause}</td>
+                    <tr class="border-b hover:bg-amber-50 transition duration-200">
+                        <td class="p-4 font-semibold text-amber-700 whitespace-nowrap">${item.blackCaseNo}</td>
+                        <td class="p-4 whitespace-nowrap">⏰ ${item.time} น.</td>
+                        <td class="p-4 whitespace-nowrap">🚪 ${item.room}</td>
+                        <td class="p-4 text-gray-700">${item.cause}</td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
             });
         }
 
-        function searchData() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = caseData.filter(item => 
-                item.blackCaseNo.toLowerCase().includes(keyword) ||
-                item.room.toLowerCase().includes(keyword) ||
-                item.cause.toLowerCase().includes(keyword)
-            );
-            renderTable(filtered);
-        }
-
-        // โหลดข้อมูลเมื่อเปิดหน้าเว็บ
+        // เริ่มโหลดข้อมูลทันทีที่เปิดหน้าเว็บ
         window.onload = fetchData;
     </script>
 </body>
