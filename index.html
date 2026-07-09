@@ -115,8 +115,8 @@
     </div>
 
     <script>
-        // ⚠️ บรรทัดที่ 63: นำลิงก์ Web App จาก Google Apps Script มาใส่แทนลิงก์ด้านล่างนี้ได้เลยครับ
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLMni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec';
+        // ⚠️ วางลิงก์ Web App ของคุณที่นี่
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLmni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec';
         
         let allCaseData = [];       
         let availableDates = [];    
@@ -125,17 +125,6 @@
         let kioskInterval = null;
 
         async function fetchData() {
-            if (GAS_URL.includes('https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLMni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec') || GAS_URL === '') {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'โหมดสาธิต: ข้อมูลตัวอย่าง',
-                    html: 'ตรวจพบว่ายังไม่ได้นำลิงก์ <b>Web App API</b> จริงมาเชื่อมต่อ<br>ระบบจะเปิดข้อมูลจำลองเพื่อแสดงดีไซน์และสีแท็กให้ตรวจสอบก่อน',
-                    confirmButtonText: 'รับทราบและทดสอบระบบ'
-                });
-                loadMockData();
-                return;
-            }
-
             Swal.fire({
                 title: 'กำลังเชื่อมต่อฐานข้อมูล...',
                 text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมายความปลอดภัยสูง',
@@ -144,7 +133,10 @@
             });
 
             try {
+                // เรียกข้อมูลจาก Google Sheets ผ่าน Web App ทันที
                 const response = await fetch(GAS_URL);
+                if (!response.ok) throw new Error('Network response was not ok');
+                
                 allCaseData = await response.json();
                
                 availableDates = [...new Set(allCaseData.map(item => item.appointDate))].filter(Boolean);
@@ -154,17 +146,23 @@
                     updateUIForCurrentDate();
                     const now = new Date();
                     document.getElementById('lastUpdateText').innerText = `🟢 ข้อมูลออนไลน์: ${now.toLocaleTimeString('th-TH')} น.`;
+                    Swal.close();
                 } else {
                     document.getElementById('currentDateDisplay').innerText = "ไม่มีข้อมูลนัดคดี";
                     document.getElementById('btnPrev').disabled = true;
                     document.getElementById('btnNext').disabled = true;
                     document.getElementById('lastUpdateText').innerText = "ตารางใน Sheets ว่างเปล่า";
                     renderLayout([]);
+                    Swal.close();
                 }
-                Swal.close();
             } catch (error) {
-                Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถเข้าถึงสิทธิ์ Web App API ได้ (เช็คการตั้งค่าสิทธิ์ให้เป็น Everyone)', 'error');
-                loadMockData();
+                console.error("Fetch Error:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด!',
+                    html: 'ไม่สามารถดึงข้อมูลจากฐานข้อมูลได้<br><br><small class="text-gray-500">กรุณาตรวจสอบว่าตั้งค่าสิทธิ์ Web App เป็น <b>"ทุกคน (Anyone)"</b> และกด Deploy <b>"เวอร์ชันใหม่"</b> แล้วหรือยัง</small>'
+                });
+                renderLayout([]);
             }
         }
 
@@ -281,18 +279,6 @@
                 btn.classList.replace('bg-red-600', 'bg-slate-700');
                 window.scrollTo({ top: 0 });
             }
-        }
-
-        function loadMockData() {
-            allCaseData = [
-                { blackCaseNo: "อ.3503/2569", appointDate: "09/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่1", cause: "นัดสอบคำให้การจำเลย" },
-                { blackCaseNo: "ผบE4964/2569", appointDate: "09/07/2569", time: "10.30", room: "ห้องพิจารณาคดีที่10", cause: "นัดไกล่เกลี่ย/ให้การ/สืบพยาน" },
-                { blackCaseNo: "ม109/2569", appointDate: "10/07/2569", time: "13.00", room: "ห้องพิจารณาคดีที่10", cause: "นัดไกล่เกลี่ย/ให้การ/สืบพยาน" }
-            ];
-            availableDates = [...new Set(allCaseData.map(item => item.appointDate))].filter(Boolean);
-            currentDateIndex = 0;
-            document.getElementById('lastUpdateText').innerText = `⚠️ ใช้ข้อมูลสาธิตระบบ`;
-            updateUIForCurrentDate();
         }
 
         window.onload = fetchData;
