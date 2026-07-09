@@ -24,9 +24,12 @@
             color: #f3f4f6 !important;
             border-color: #2d2d2d;
         }
+        body.dark-kiosk .bg-gray-50 { background-color: #262626 !important; }
         body.dark-kiosk .bg-gray-100 { background-color: #262626 !important; }
         body.dark-kiosk .bg-gray-200 { background-color: #333333 !important; color: #f3f4f6 !important; }
         body.dark-kiosk .text-amber-800 { color: #fbbf24 !important; }
+        body.dark-kiosk .text-gray-500 { color: #a3a3a3 !important; }
+        body.dark-kiosk .text-gray-700 { color: #e5e7eb !important; }
         body.dark-kiosk input { background-color: #262626 !important; color: white !important; border-color: #404040 !important; }
         body.dark-kiosk .mobile-card { background-color: #262626 !important; border-color: #404040 !important; }
         body.dark-kiosk tr:hover { background-color: #262626 !important; }
@@ -35,77 +38,84 @@
         @media print {
             body { background-image: none !important; background-color: white !important; color: black !important; }
             .no-print, button, input, #lastUpdateText { display: none !important; }
-            #mainContainer { box-shadow: none !important; max-w: 100% !important; margin: 0 !important; padding: 0 !important; opacity: 1 !important; }
+            #mainContainer { box-shadow: none !important; max-w: 100% !important; margin: 0 !important; padding: 0 !important; opacity: 1 !important; border: none !important; }
             .bg-amber-800 { background-color: #7c2d12 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             th { background-color: #e5e7eb !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             td { color: black !important; border-bottom: 1px solid #d1d5db !important; }
+            .print-footer { border-t: 1px solid #e5e7eb !important; color: #555555 !important; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="text-gray-100 min-h-screen p-2 md:p-6">
 
-    <div id="mainContainer" class="max-w-6xl mx-auto bg-white text-gray-800 rounded-2xl shadow-2xl overflow-hidden opacity-98 transition-all duration-500">
-        <div class="p-6 bg-amber-800 text-white flex flex-col md:flex-row justify-between items-center gap-4 border-b-4 border-amber-900">
-            <div class="text-center md:text-left">
-                <h1 class="text-2xl md:text-3xl font-bold tracking-wide">🏛️ ระบบบริการข้อมูลตารางนัดพิจารณาคดี</h1>
-                <p class="text-amber-200 text-xs md:text-sm mt-1">ศาลแขวงอุบลราชธานี • หน้าจอประชาสัมพันธ์อิเล็กทรอนิกส์</p>
-            </div>
-            <div class="flex flex-col items-center md:items-end gap-2">
-                <p id="lastUpdateText" class="text-xs bg-amber-900 bg-opacity-60 px-4 py-1.5 rounded-full shadow-inner border border-amber-700">กำลังตรวจสอบระบบ...</p>
-                <div class="no-print flex gap-2">
-                    <button id="kioskToggle" onclick="toggleKioskMode()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition shadow">
-                        📺 เปิดโหมดทีวี
-                    </button>
-                    <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition shadow">
-                        🖨️ พิมพ์เอกสาร
-                    </button>
+    <div id="mainContainer" class="max-w-6xl mx-auto bg-white text-gray-800 rounded-2xl shadow-2xl overflow-hidden opacity-98 transition-all duration-500 flex flex-col justify-between">
+        <div>
+            <div class="p-6 bg-amber-800 text-white flex flex-col md:flex-row justify-between items-center gap-4 border-b-4 border-amber-900">
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-bold tracking-wide">🏛️ ระบบบริการข้อมูลตารางนัดพิจารณาคดี</h1>
+                    <p class="text-amber-200 text-xs md:text-sm mt-1">ศาลแขวงอุบลราชธานี • หน้าจอประชาสัมพันธ์อิเล็กทรอนิกส์</p>
                 </div>
+                <div class="flex flex-col items-center md:items-end gap-2">
+                    <p id="lastUpdateText" class="text-xs bg-amber-900 bg-opacity-60 px-4 py-1.5 rounded-full shadow-inner border border-amber-700">กำลังตรวจสอบระบบ...</p>
+                    <div class="no-print flex gap-2">
+                        <button id="kioskToggle" onclick="toggleKioskMode()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition shadow">
+                            📺 เปิดโหมดทีวี
+                        </button>
+                        <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition shadow">
+                            🖨️ พิมพ์เอกสาร
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 md:p-8">
+                <div class="no-print flex flex-col lg:flex-row justify-between items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-2 bg-white p-1.5 rounded-lg w-full lg:w-auto justify-between shadow border border-gray-100">
+                        <button id="btnPrev" onclick="changeDay(-1)" class="px-4 py-2 bg-gray-100 hover:bg-amber-700 hover:text-white rounded-md font-bold text-gray-700 disabled:opacity-40 disabled:hover:bg-gray-100 disabled:hover:text-gray-700 transition duration-200">
+                            ◀ ก่อนหน้า
+                        </button>
+                        <div id="currentDateDisplay" class="font-bold text-amber-800 text-base md:text-lg min-w-[140px] text-center">
+                            กำลังโหลดวันนัด...
+                        </div>
+                        <button id="btnNext" onclick="changeDay(1)" class="px-4 py-2 bg-gray-100 hover:bg-amber-700 hover:text-white rounded-md font-bold text-gray-700 disabled:opacity-40 disabled:hover:bg-gray-100 disabled:hover:text-gray-700 transition duration-200">
+                            ถัดไป ▶
+                        </button>
+                    </div>
+
+                    <div class="flex gap-2 w-full lg:flex-1 max-w-xl">
+                        <input type="text" id="searchInput" onkeyup="searchData()" placeholder="พิมพ์ ค้นหาด่วน... เลขคดี, ห้องพิจารณา, สาเหตุที่นัด" 
+                               class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-600 bg-white text-sm shadow-inner">
+                    </div>
+                </div>
+
+                <div class="hidden md:block overflow-x-auto rounded-xl border border-gray-200 shadow-md">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 text-sm tracking-wide">
+                                <th class="p-4 border-b font-semibold w-[25%]">เลขคดีดำ</th>
+                                <th class="p-4 border-b font-semibold w-[15%]">เวลานัด</th>
+                                <th class="p-4 border-b font-semibold w-[25%]">ห้องพิจารณาคดี</th>
+                                <th class="p-4 border-b font-semibold w-[35%]">สาเหตุที่นัด</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-gray-100 text-sm">
+                            </tbody>
+                    </table>
+                </div>
+
+                <div id="cardContainer" class="block md:hidden space-y-3">
+                    </div>
             </div>
         </div>
 
-        <div class="p-4 md:p-8">
-            <div class="no-print flex flex-col lg:flex-row justify-between items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
-                <div class="flex items-center gap-2 bg-white p-1.5 rounded-lg w-full lg:w-auto justify-between shadow border border-gray-100">
-                    <button id="btnPrev" onclick="changeDay(-1)" class="px-4 py-2 bg-gray-100 hover:bg-amber-700 hover:text-white rounded-md font-bold text-gray-700 disabled:opacity-40 disabled:hover:bg-gray-100 disabled:hover:text-gray-700 transition duration-200">
-                        ◀ ก่อนหน้า
-                    </button>
-                    <div id="currentDateDisplay" class="font-bold text-amber-800 text-base md:text-lg min-w-[140px] text-center">
-                        กำลังโหลดวันนัด...
-                    </div>
-                    <button id="btnNext" onclick="changeDay(1)" class="px-4 py-2 bg-gray-100 hover:bg-amber-700 hover:text-white rounded-md font-bold text-gray-700 disabled:opacity-40 disabled:hover:bg-gray-100 disabled:hover:text-gray-700 transition duration-200">
-                        ถัดไป ▶
-                    </button>
-                </div>
-
-                <div class="flex gap-2 w-full lg:flex-1 max-w-xl">
-                    <input type="text" id="searchInput" onkeyup="searchData()" placeholder="พิมพ์ ค้นหาด่วน... เลขคดี, ห้องพิจารณา, สาเหตุที่นัด" 
-                           class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-600 bg-white text-sm shadow-inner">
-                </div>
-            </div>
-
-            <div class="hidden md:block overflow-x-auto rounded-xl border border-gray-200 shadow-md">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-100 text-gray-700 text-sm tracking-wide">
-                            <th class="p-4 border-b font-semibold w-[25%]">เลขคดีดำ</th>
-                            <th class="p-4 border-b font-semibold w-[15%]">เวลานัด</th>
-                            <th class="p-4 border-b font-semibold w-[25%]">ห้องพิจารณาคดี</th>
-                            <th class="p-4 border-b font-semibold w-[35%]">สาเหตุที่นัด</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-gray-100 text-sm">
-                        </tbody>
-                </table>
-            </div>
-
-            <div id="cardContainer" class="block md:hidden space-y-3">
-                </div>
+        <div class="print-footer p-4 bg-gray-50 text-center text-xs md:text-sm text-gray-500 border-t border-gray-100 transition-colors duration-500">
+            พัฒนาโดย <span class="font-semibold text-gray-700 transition-colors duration-500">นายวีระยุทธ ประชุมรักษ์</span> พนักงานคอมพิวเตอร์ ประจำศาลแขวงอุบลราชธานี กลุ่มงานเทคโนโลยีสารสนเทศ
         </div>
     </div>
 
     <script>
-        // ⚠️ บรรทัดที่ 54: นำลิงก์ Web App จาก Google Apps Script มาใส่แทนลิงก์ด้านล่างนี้ได้เลยครับ
+        // ⚠️ บรรทัดที่ 63: นำลิงก์ Web App จาก Google Apps Script มาใส่แทนลิงก์ด้านล่างนี้ได้เลยครับ
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLMni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec';
         
         let allCaseData = [];       
@@ -115,7 +125,7 @@
         let kioskInterval = null;
 
         async function fetchData() {
-            if (GAS_URL.includes('ใส่_URL_WEB_APP_ของใช้งานจริงที่นี่') || GAS_URL === '') {
+            if (GAS_URL.includes('https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLMni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec') || GAS_URL === '') {
                 Swal.fire({
                     icon: 'warning',
                     title: 'โหมดสาธิต: ข้อมูลตัวอย่าง',
@@ -158,18 +168,17 @@
             }
         }
 
-        // ฟังก์ชันกำหนดสีแท็ก (Badge) แยกประเภทคดีอัจฉริยะ
         function getBadgeStyle(caseNo) {
             if (!caseNo) return 'bg-gray-100 text-gray-800 border-gray-200';
             const cleanNo = caseNo.toUpperCase();
             if (cleanNo.includes('อ')) {
-                return 'bg-red-50 text-red-700 border border-red-200 font-bold'; // คดีอาญาเด่นชัด
+                return 'bg-red-50 text-red-700 border border-red-200 font-bold'; 
             } else if (cleanNo.includes('ผบ')) {
-                return 'bg-blue-50 text-blue-700 border border-blue-200 font-bold'; // คดีผู้บริโภค
+                return 'bg-blue-50 text-blue-700 border border-blue-200 font-bold'; 
             } else if (cleanNo.includes('ม')) {
-                return 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'; // คดีมโนสาเร่
+                return 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold'; 
             }
-            return 'bg-amber-50 text-amber-800 border border-amber-200'; // คดีอื่นๆ
+            return 'bg-amber-50 text-amber-800 border border-amber-200'; 
         }
 
         function updateUIForCurrentDate() {
@@ -206,7 +215,6 @@
             renderLayout(filtered);
         }
 
-        // ฟังก์ชันเรนเดอร์ตารางและผสานร่างการ์ดมือถือพร้อมกัน
         function renderLayout(data) {
             const tbody = document.getElementById('tableBody');
             const cardContainer = document.getElementById('cardContainer');
@@ -225,7 +233,6 @@
             data.forEach(item => {
                 const badgeClass = getBadgeStyle(item.blackCaseNo);
                 
-                // 1. วาดตารางสำหรับ Desktop
                 const row = `
                     <tr class="hover:bg-amber-50/50 transition duration-150">
                         <td class="p-4 font-semibold"><span class="px-2.5 py-1 rounded-md text-xs tracking-wider ${badgeClass}">${item.blackCaseNo}</span></td>
@@ -236,7 +243,6 @@
                 `;
                 tbody.innerHTML += row;
 
-                // 2. วาดกล่องการ์ดสำหรับ Mobile 
                 const card = `
                     <div class="mobile-card bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-2">
                         <div class="flex justify-between items-center">
@@ -251,7 +257,6 @@
             });
         }
 
-        // 📺 ฟังก์ชัน เปิด/ปิด โหมดตู้ประชาสัมพันธ์ (Kiosk Auto-Scroll)
         function toggleKioskMode() {
             const body = document.body;
             const btn = document.getElementById('kioskToggle');
@@ -261,10 +266,9 @@
                 btn.innerHTML = '🛑 ปิดโหมดทีวี';
                 btn.classList.replace('bg-slate-700', 'bg-red-600');
                 
-                // ตั้งความเร็วการเลื่อนจอลงทีละนิดอัตโนมัติ
                 kioskInterval = setInterval(() => {
                     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
-                        window.scrollTo({ top: 0, behavior: 'smooth' }); // ถ้าลงสุดให้กลับไปบนสุดแบบสมูท
+                        window.scrollTo({ top: 0, behavior: 'smooth' }); 
                     } else {
                         window.scrollBy({ top: 35, behavior: 'smooth' });
                     }
