@@ -22,7 +22,7 @@
     <div class="max-w-6xl mx-auto bg-white text-gray-800 rounded-xl shadow-2xl overflow-hidden opacity-95">
         <div class="p-6 md:p-8 bg-amber-800 text-white flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-2xl md:text-3xl font-semibold text-center md:text-left">🏛️ ตารางนัดพิจารณาคดีศาล</h1>
-            <p id="lastUpdateText" class="text-sm bg-amber-900 px-4 py-2 rounded-full shadow-inner">กำลังดึงข้อมูล...</p>
+            <p id="lastUpdateText" class="text-sm bg-amber-900 px-4 py-2 rounded-full shadow-inner">กำลังตรวจสอบการเชื่อมต่อ...</p>
         </div>
 
         <div class="p-6 md:p-8">
@@ -66,8 +66,8 @@
     </div>
 
     <script>
-        // ⚠️ สำคัญมาก: เปลี่ยนตรงนี้ให้เป็น URL ของ Apps Script Web App ของคุณเองครับ
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxl0ahOtYzgNNw7cozjkWmLxv31C53mzz-pAmuthElYErh8-R2oSPULr1DXplEmu5vu/exec';
+        // ⚠️ นำลิงก์ Web App จาก Google Apps Script ที่ลงท้ายด้วย /exec มาใส่ตรงนี้ครับ
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLMni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec';
         
         let allCaseData = [];       
         let availableDates = [];    
@@ -75,15 +75,29 @@
         let currentFilteredData = []; 
 
         async function fetchData() {
+            // ตรวจสอบเบื้องต้นว่าผู้ใช้ลืมเปลี่ยน URL หรือไม่
+            if (GAS_URL.includes('ใส่_URL_WEB_APP_ของใช้งานจริงที่นี่') || GAS_URL === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'แจ้งเตือน: ยังเป็นข้อมูลตัวอย่าง!',
+                    html: 'คุณยังไม่ได้นำลิงก์ <b>Google Apps Script (Web App)</b> มาใส่ในโค้ดบรรทัดที่ 54<br><br><small class="text-gray-500">ระบบจะแสดงข้อมูลจำลองให้คุณเห็นโครงสร้างหน้าเว็บก่อน</small>',
+                    confirmButtonText: 'เข้าใจแล้ว'
+                });
+                
+                // โหลดข้อมูลจำลองให้เห็นโครงสร้าง UX/UI
+                loadMockData();
+                return;
+            }
+
             Swal.fire({
-                title: 'กำลังโหลดข้อมูล...',
-                text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมายจริง',
+                title: 'กำลังดึงข้อมูลจริง...',
+                text: 'กรุณารอสักครู่ ระบบกำลังเชื่อมต่อไปยัง Google Sheets',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             try {
-                // เรียกข้อมูลจริงจาก Google Sheets
+                // เรียกข้อมูลจริงจาก Google Sheets ผ่าน Web App API
                 const response = await fetch(GAS_URL);
                 allCaseData = await response.json();
                
@@ -95,20 +109,37 @@
                     updateUIForCurrentDate();
                     
                     const now = new Date();
-                    document.getElementById('lastUpdateText').innerText = `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH')} น.`;
+                    document.getElementById('lastUpdateText').innerText = `🔴 ข้อมูลจริงอัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH')} น.`;
                 } else {
-                    document.getElementById('currentDateDisplay').innerText = "ไม่พบข้อมูลนัดหมาย";
+                    document.getElementById('currentDateDisplay').innerText = "ไม่พบข้อมูลในระบบ";
                     document.getElementById('btnPrev').disabled = true;
                     document.getElementById('btnNext').disabled = true;
-                    document.getElementById('lastUpdateText').innerText = "ไม่มีข้อมูล";
+                    document.getElementById('lastUpdateText').innerText = "ไม่มีข้อมูลในตาราง Sheets";
                     renderTable([]);
                 }
-
                 Swal.close();
             } catch (error) {
-                Swal.fire('ข้อผิดพลาด!', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาตรวจสอบ URL ของ Apps Script', 'error');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เชื่อมต่อฐานข้อมูลล้มเหลว!',
+                    text: 'กรุณาตรวจสอบว่าตั้งค่าสิทธิ์ใน Apps Script เป็น "Anyone (ทุกคน)" แล้วหรือยัง',
+                });
                 console.error("Fetch Error:", error);
+                loadMockData(); // หากพังให้ดึงข้อมูลจำลองขึ้นมาแทนเพื่อไม่ให้หน้าเว็บว่างเปล่า
             }
+        }
+
+        // ฟังก์ชันโหลดข้อมูลจำลองในกรณีที่ยังไม่ได้ต่อ API จริง
+        function loadMockData() {
+            allCaseData = [
+                { blackCaseNo: "อ.ตัวอย่าง 111/2569", appointDate: "09/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่ 1", cause: "นัดสอบคำให้การ (ข้อมูลจำลอง)" },
+                { blackCaseNo: "อ.ตัวอย่าง 222/2569", appointDate: "09/07/2569", time: "10.30", room: "ห้องพิจารณาคดีที่ 2", cause: "นัดไกล่เกลี่ย (ข้อมูลจำลอง)" },
+                { blackCaseNo: "ผบ.ตัวอย่าง 333/2569", appointDate: "10/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่ 3", cause: "ฟังคำพิพากษา (ข้อมูลจำลอง)" }
+            ];
+            availableDates = [...new Set(allCaseData.map(item => item.appointDate))].filter(Boolean);
+            currentDateIndex = 0;
+            document.getElementById('lastUpdateText').innerText = `⚠️ กำลังใช้ข้อมูลตัวอย่าง`;
+            updateUIForCurrentDate();
         }
 
         function updateUIForCurrentDate() {
