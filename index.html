@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบตรวจสอบวันนัดพิจารณาคดี</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            /* พื้นหลังธีมศาลยุติธรรม/กฎหมาย (สามารถเปลี่ยน URL รูปภาพได้) */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Sarabun', sans-serif;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body class="text-gray-100 min-h-screen p-8">
+
+    <div class="max-w-6xl mx-auto bg-white text-gray-800 rounded-xl shadow-2xl overflow-hidden opacity-95">
+        <div class="p-8 bg-amber-800 text-white flex justify-between items-center">
+            <h1 class="text-3xl font-semibold">🏛️ ตารางนัดพิจารณาคดีศาล</h1>
+            <p class="text-sm">ข้อมูลอัปเดตล่าสุด: วันนี้</p>
+        </div>
+
+        <div class="p-8">
+            <div class="mb-6 flex gap-4">
+                <input type="text" id="searchInput" placeholder="ค้นหาเลขคดีดำ, ห้องพิจารณา, หรือสาเหตุ..." 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600">
+                <button onclick="searchData()" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-3 rounded-lg font-semibold transition">
+                    ค้นหา
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700">
+                            <th class="p-4 border-b">เลขคดีดำ</th>
+                            <th class="p-4 border-b">เวลานัด</th>
+                            <th class="p-4 border-b">ห้องพิจารณาคดี</th>
+                            <th class="p-4 border-b">สาเหตุที่นัด</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // กำหนด URL ของ Google Apps Script Web App (รอคุณเอาสคริปต์ไป Deploy ก่อน)
+        const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+        let caseData = [];
+
+        async function fetchData() {
+            Swal.fire({
+                title: 'กำลังโหลดข้อมูล...',
+                text: 'กรุณารอสักครู่ ระบบกำลังดึงข้อมูลนัดหมาย',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            try {
+                // TODO: เมื่อสร้าง Backend เสร็จ ให้เปลี่ยน URL ตรงนี้
+                /*
+                const response = await fetch(GAS_URL);
+                caseData = await response.json();
+                */
+               
+                // Mock Data ไปก่อนระหว่างรอ Backend
+                caseData = [
+                    { blackCaseNo: "อ.123/2569", time: "09:00", room: "ห้องพิจารณา 1", cause: "สืบพยานโจทก์" },
+                    { blackCaseNo: "ผบ.456/2569", time: "13:30", room: "ห้องพิจารณา 3", cause: "ไกล่เกลี่ย" }
+                ];
+
+                renderTable(caseData);
+                Swal.close();
+            } catch (error) {
+                Swal.fire('ข้อผิดพลาด!', 'ไม่สามารถดึงข้อมูลได้', 'error');
+                console.error("Fetch Error:", error);
+            }
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">ไม่พบข้อมูล</td></tr>';
+                return;
+            }
+
+            data.forEach(item => {
+                const row = `
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="p-4 font-semibold text-amber-700">${item.blackCaseNo}</td>
+                        <td class="p-4">${item.time}</td>
+                        <td class="p-4">${item.room}</td>
+                        <td class="p-4">${item.cause}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function searchData() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = caseData.filter(item => 
+                item.blackCaseNo.toLowerCase().includes(keyword) ||
+                item.room.toLowerCase().includes(keyword) ||
+                item.cause.toLowerCase().includes(keyword)
+            );
+            renderTable(filtered);
+        }
+
+        // โหลดข้อมูลเมื่อเปิดหน้าเว็บ
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
