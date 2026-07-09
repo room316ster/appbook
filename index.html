@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            /* พื้นหลังธีมศาลยุติธรรม/กฎหมาย */
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-attachment: fixed;
@@ -67,47 +66,36 @@
     </div>
 
     <script>
-        // ⚠️ นำ URL ของ Apps Script ที่ Deploy ไว้มาใส่ตรงนี้
+        // ⚠️ สำคัญมาก: เปลี่ยนตรงนี้ให้เป็น URL ของ Apps Script Web App ของคุณเองครับ
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxl0ahOtYzgNNw7cozjkWmLxv31C53mzz-pAmuthElYErh8-R2oSPULr1DXplEmu5vu/exec';
         
-        let allCaseData = [];       // เก็บข้อมูลทั้งหมดที่ดึงมา
-        let availableDates = [];    // เก็บรายชื่อวันที่ทั้งหมดที่มีในระบบ
-        let currentDateIndex = 0;   // เก็บตำแหน่งหน้าที่กำลังดูอยู่
-        let currentFilteredData = []; // เก็บข้อมูลเฉพาะของวันนั้นๆ เพื่อให้ค้นหาได้ถูกต้อง
+        let allCaseData = [];       
+        let availableDates = [];    
+        let currentDateIndex = 0;   
+        let currentFilteredData = []; 
 
         async function fetchData() {
             Swal.fire({
                 title: 'กำลังโหลดข้อมูล...',
-                text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมาย',
+                text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมายจริง',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             try {
-                // TODO: ลบ Comment ออกเมื่อพร้อมเชื่อมต่อ Google Sheets จริง
-                /*
+                // เรียกข้อมูลจริงจาก Google Sheets
                 const response = await fetch(GAS_URL);
                 allCaseData = await response.json();
-                */
                
-                // ข้อมูลจำลอง (Mock Data) สำหรับการทดสอบ UI เบื้องต้น
-                allCaseData = [
-                    { blackCaseNo: "อ.111/2569", appointDate: "09/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่1", cause: "สืบพยานโจทก์" },
-                    { blackCaseNo: "อ.222/2569", appointDate: "09/07/2569", time: "10.30", room: "ห้องพิจารณาคดีที่2", cause: "ไกล่เกลี่ย" },
-                    { blackCaseNo: "ผบ.333/2569", appointDate: "10/07/2569", time: "09.00", room: "ห้องพิจารณาคดีที่3", cause: "ฟังคำพิพากษา" },
-                    { blackCaseNo: "ม.444/2569", appointDate: "12/07/2569", time: "13.30", room: "ห้องพิจารณาคดีที่1", cause: "นัดไต่สวนมูลฟ้อง" }
-                ];
-
-                // กรองหาวันที่ที่ไม่ซ้ำกัน (Unique Dates) และเรียงลำดับ
+                // จัดกลุ่มหาวันที่ทั้งหมดแบบไม่ซ้ำ และเรียงลำดับ
                 availableDates = [...new Set(allCaseData.map(item => item.appointDate))].filter(Boolean);
                 
                 if (availableDates.length > 0) {
-                    currentDateIndex = 0; // เริ่มต้นที่วันแรกสุดที่มีข้อมูล
+                    currentDateIndex = 0; 
                     updateUIForCurrentDate();
                     
-                    // แสดงเวลาที่อัปเดตข้อมูล
                     const now = new Date();
-                    document.getElementById('lastUpdateText').innerText = `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH')}`;
+                    document.getElementById('lastUpdateText').innerText = `อัปเดตล่าสุด: ${now.toLocaleTimeString('th-TH')} น.`;
                 } else {
                     document.getElementById('currentDateDisplay').innerText = "ไม่พบข้อมูลนัดหมาย";
                     document.getElementById('btnPrev').disabled = true;
@@ -118,41 +106,31 @@
 
                 Swal.close();
             } catch (error) {
-                Swal.fire('ข้อผิดพลาด!', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
+                Swal.fire('ข้อผิดพลาด!', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาตรวจสอบ URL ของ Apps Script', 'error');
                 console.error("Fetch Error:", error);
             }
         }
 
-        // ฟังก์ชันอัปเดตหน้าจอเมื่อเปลี่ยนวัน
         function updateUIForCurrentDate() {
             const targetDate = availableDates[currentDateIndex];
-            
-            // อัปเดตข้อความวันที่บนปุ่ม
             document.getElementById('currentDateDisplay').innerText = `📅 ${targetDate}`;
             
-            // ปิด/เปิด ปุ่มย้อนหลัง-ถัดไป ตามจำนวนวันที่มี
             document.getElementById('btnPrev').disabled = (currentDateIndex === 0);
             document.getElementById('btnNext').disabled = (currentDateIndex === availableDates.length - 1);
 
-            // กรองข้อมูลทั้งหมด ให้เหลือเฉพาะวันที่กำลังเลือกดู
             currentFilteredData = allCaseData.filter(item => item.appointDate === targetDate);
-            
-            // เคลียร์ช่องค้นหาและแสดงผลตาราง
             document.getElementById('searchInput').value = '';
             renderTable(currentFilteredData);
         }
 
-        // ฟังก์ชันขยับวัน (1 = ถัดไป, -1 = ย้อนหลัง)
         function changeDay(step) {
             const newIndex = currentDateIndex + step;
-            // ป้องกันไม่ให้ index เกินขอบเขตที่มี
             if (newIndex >= 0 && newIndex < availableDates.length) {
                 currentDateIndex = newIndex;
                 updateUIForCurrentDate();
             }
         }
 
-        // ฟังก์ชันค้นหา (จากข้อมูลของวันที่เลือกอยู่เท่านั้น)
         function searchData() {
             const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
             
@@ -169,14 +147,10 @@
             renderTable(filtered);
         }
 
-        // เพิ่มการกด Enter ในช่องค้นหา
         document.getElementById('searchInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                searchData();
-            }
+            if (e.key === 'Enter') { searchData(); }
         });
 
-        // ฟังก์ชันวาดตาราง
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -199,7 +173,6 @@
             });
         }
 
-        // เริ่มโหลดข้อมูลทันทีที่เปิดหน้าเว็บ
         window.onload = fetchData;
     </script>
 </body>
