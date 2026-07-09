@@ -115,7 +115,7 @@
     </div>
 
     <script>
-        // ⚠️ วางลิงก์ Web App ของคุณที่นี่
+        // ลิงก์ Web App API ของคุณ
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXAWkOHlwMTRf6zF6iLmni288NVd4Po5gRGyoQeBhiSnofZs7tdAeGcZdbDHkB0cIw/exec';
         
         let allCaseData = [];       
@@ -127,18 +127,19 @@
         async function fetchData() {
             Swal.fire({
                 title: 'กำลังเชื่อมต่อฐานข้อมูล...',
-                text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมายความปลอดภัยสูง',
+                text: 'กรุณารอสักครู่ ระบบกำลังดึงตารางนัดหมาย',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
 
             try {
-                // เรียกข้อมูลจาก Google Sheets ผ่าน Web App ทันที
+                // เรียกข้อมูลจาก Google Sheets ผ่าน Web App
                 const response = await fetch(GAS_URL);
                 if (!response.ok) throw new Error('Network response was not ok');
                 
                 allCaseData = await response.json();
                
+                // จัดกลุ่มวันที่
                 availableDates = [...new Set(allCaseData.map(item => item.appointDate))].filter(Boolean);
                 
                 if (availableDates.length > 0) {
@@ -160,12 +161,13 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'เกิดข้อผิดพลาด!',
-                    html: 'ไม่สามารถดึงข้อมูลจากฐานข้อมูลได้<br><br><small class="text-gray-500">กรุณาตรวจสอบว่าตั้งค่าสิทธิ์ Web App เป็น <b>"ทุกคน (Anyone)"</b> และกด Deploy <b>"เวอร์ชันใหม่"</b> แล้วหรือยัง</small>'
+                    html: 'ไม่สามารถดึงข้อมูลจาก Google Sheets ได้<br><br><small class="text-gray-500">กรุณาตรวจสอบว่าตั้งค่าสิทธิ์ Apps Script เป็น <b>"ทุกคน (Anyone)"</b> และกด Deploy <b>"เวอร์ชันใหม่"</b> แล้ว</small>'
                 });
                 renderLayout([]);
             }
         }
 
+        // ฟังก์ชันแยกสีประเภทคดี
         function getBadgeStyle(caseNo) {
             if (!caseNo) return 'bg-gray-100 text-gray-800 border-gray-200';
             const cleanNo = caseNo.toUpperCase();
