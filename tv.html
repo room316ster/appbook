@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>จอแสดงผลวันนัดพิจารณาคดีแนวตั้ง (Vertical TV Signage) | ศาลยุติธรรม</title>
+  
+  <link rel="icon" type="image/png" href="icon-192.png">
+  
+  <!-- Google Fonts: Sarabun & Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #0f275e;
+      --primary-dark: #071330;
+      --primary-light: #2563eb;
+      --gold: #f59e0b;
+      --gold-light: #fbbf24;
+      --accent-cyan: #06b6d4;
+
+      /* Case Type Colors */
+      --crimson-bg: #450a0a;
+      --crimson-border: #ef4444;
+      --crimson-text: #fecaca;
+      --crimson-badge: #dc2626;
+
+      --blue-bg: #082f49;
+      --blue-border: #38bdf8;
+      --blue-text: #e0f2fe;
+      --blue-badge: #0284c7;
+
+      --purple-bg: #3b0764;
+      --purple-border: #c084fc;
+      --purple-text: #f3e8ff;
+      --purple-badge: #9333ea;
+
+      --teal-bg: #042f2e;
+      --teal-border: #2dd4bf;
+      --teal-text: #ccfbf1;
+      --teal-badge: #0d9488;
+
+      /* Time Badges */
+      --morning-badge: #d97706;
+      --afternoon-badge: #0284c7;
+
+      /* Signage TV Dark Surface (High Contrast) */
+      --tv-bg: #070d19;
+      --tv-card-bg: rgba(17, 28, 52, 0.92);
+      --tv-card-border: rgba(59, 130, 246, 0.28);
+      --tv-text-main: #f8fafc;
+      --tv-text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      background-color: var(--tv-bg);
+      color: var(--tv-text-main);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* =========================================
+       TOP HEADER: Court Emblem, Title, Real-Time Clock
+       ========================================= */
+    .tv-header {
+      background: linear-gradient(135deg, #071330 0%, #0f275e 60%, #1e3a8a 100%);
+      border-bottom: 2px solid rgba(251, 191, 36, 0.5);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .tv-court-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .tv-emblem-box {
+      width: 58px;
+      height: 58px;
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      font-size: 28px;
+      box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+      flex-shrink: 0;
+    }
+
+    .tv-titles h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .tv-titles .sub {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .tv-room-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .tv-date-badge {
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .tv-clock-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 18px;
+      border-radius: 12px;
+    }
+
+    .tv-clock-time {
+      font-family: 'Prompt', monospace;
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #fbbf24;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+    }
+
+    .tv-clock-date {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    /* =========================================
+       MAIN BODY (Split Top / Bottom)
+       ========================================= */
+    .tv-split-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 88px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* SECTION 1: TOP COURT DOCKET (Default 60% of vertical height) */
+    .tv-docket-section {
+      height: 60%;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at top, #0f1c37 0%, #070d19 100%);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid rgba(59, 130, 246, 0.35);
+    }
+
+    /* Docket Subheader Bar */
+    .tv-docket-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      background: rgba(15, 23, 42, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .tv-docket-bar .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .tv-count-pill {
+      background: #2563eb;
+      color: #ffffff;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .tv-docket-bar .right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .tv-page-indicator {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 3px 14px;
+      border-radius: 20px;
+      color: #f1f5f9;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* Auto-slide Progress Bar */
+    .tv-slide-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tv-slide-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #fbbf24);
+      transition: width 0.1s linear;
+    }
+
+    /* Docket Cards Slide Frame */
+    .tv-cards-viewport {
+      flex: 1;
+      padding: 16px 20px;
+      overflow-y: hidden;
+      position: relative;
+    }
+
+    .tv-cards-page {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+      animation: fadeInSlide 0.55s ease-out;
+    }
+
+    @keyframes fadeInSlide {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Individual Case Card for TV */
+    .tv-case-card {
+      background: var(--tv-card-bg);
+      border: 1.5px solid var(--tv-card-border);
+      border-left: 6px solid #3b82f6;
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
+      justify-content: center;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .tv-case-card.type-criminal {
+      border-left-color: var(--crimson-badge);
+      background: linear-gradient(90deg, rgba(69, 10, 10, 0.45) 0%, rgba(17, 28, 52, 0.95) 40%);
+    }
+
+    .tv-case-card.type-consumer {
+      border-left-color: var(--blue-badge);
+      background: linear-gradient(90deg, rgba(8, 47, 73, 0.45) 0%, rgba(17, 28, 52, 0.95) 40%);
+    }
+
+    .tv-case-card.type-civil {
+      border-left-color: var(--purple-badge);
+      background: linear-gradient(90deg, rgba(59, 7, 100, 0.45) 0%, rgba(17, 28, 52, 0.95) 40%);
+    }
+
+    .tv-case-card.type-special {
+      border-left-color: var(--teal-badge);
+      background: linear-gradient(90deg, rgba(4, 47, 46, 0.45) 0%, rgba(17, 28, 52, 0.95) 40%);
+    }
+
+    .tv-card-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .tv-badges-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge-case-type {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-time-slot {
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-morning {
+      background: rgba(217, 119, 6, 0.25);
+      color: #fbbf24;
+      border: 1px solid rgba(217, 119, 6, 0.5);
+    }
+
+    .badge-afternoon {
+      background: rgba(2, 132, 199, 0.25);
+      color: #38bdf8;
+      border: 1px solid rgba(2, 132, 199, 0.5);
+    }
+
+    .tv-room-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tv-card-main {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tv-case-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .tv-case-reason {
+      font-size: 0.98rem;
+      color: #fbbf24;
+      font-weight: 600;
+      background: rgba(251, 191, 36, 0.12);
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px dashed rgba(251, 191, 36, 0.35);
+    }
+
+    .tv-parties-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tv-party-item {
+      font-size: 0.88rem;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tv-party-item .lbl {
+      color: #94a3b8;
+      font-size: 0.76rem;
+      margin-right: 4px;
+    }
+
+    .tv-party-item .name {
+      color: #f1f5f9;
+      font-weight: 500;
+    }
+
+    /* Empty Docket State */
+    .tv-empty-docket {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #64748b;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .tv-empty-docket i {
+      font-size: 3rem;
+      color: #3b82f6;
+      opacity: 0.5;
+    }
+
+    /* SECTION 2: BOTTOM MEDIA PLAYER (Default 40% of vertical height) */
+    .tv-media-section {
+      height: 40%;
+      min-height: 240px;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tv-media-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 24px;
+      background: linear-gradient(90deg, #071330 0%, #0f172a 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      z-index: 5;
+    }
+
+    .tv-media-bar .title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tv-media-bar .status-badge {
+      font-size: 0.78rem;
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tv-media-content {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* HTML5 Video Player */
+    #tvVideoPlayer {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* YouTube Iframe Player */
+    #tvYoutubeFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+
+    /* Image Slideshow Player */
+    #tvImageContainer {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: none;
+      overflow: hidden;
+    }
+
+    .tv-slide-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out, transform 6s linear;
+      transform: scale(1);
+    }
+
+    .tv-slide-image.active {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* Ticker Text at Bottom of Media */
+    .tv-ticker-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .tv-ticker-tag {
+      background: #d97706;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tv-ticker-marquee {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+    }
+
+    .tv-ticker-text {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marqueeText 32s linear infinite;
+    }
+
+    @keyframes marqueeText {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    /* =========================================
+       FLOATING OSD CONTROLS (Auto-hides)
+       ========================================= */
+    .tv-floating-controls {
+      position: fixed;
+      right: 20px;
+      bottom: 45px;
+      display: flex;
+      gap: 10px;
+      z-index: 50;
+      opacity: 0.25;
+      transition: opacity 0.3s ease;
+    }
+
+    .tv-floating-controls:hover {
+      opacity: 1;
+    }
+
+    .tv-ctrl-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    .tv-ctrl-btn:hover {
+      background: #2563eb;
+      transform: scale(1.1);
+      border-color: #60a5fa;
+    }
+
+    /* =========================================
+       SETTINGS MODAL (Dialog for TV Config)
+       ========================================= */
+    .tv-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .tv-modal-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tv-modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tv-modal-header h2 {
+      font-size: 1.25rem;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tv-modal-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .tv-modal-body {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .setting-group {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .setting-group-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .setting-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .setting-row label {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .setting-row select,
+    .setting-row input,
+    .setting-row textarea {
+      background: #0f172a;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      color: #f8fafc;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .setting-row select:focus,
+    .setting-row input:focus,
+    .setting-row textarea:focus {
+      border-color: #38bdf8;
+    }
+
+    .tv-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-save {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-save:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-reset {
+      background: #334155;
+      color: #cbd5e1;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Helper Utilities */
+    .text-gold { color: #fbbf24; }
+    .text-muted { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================
+       1. TOP HEADER: Court Emblem, Title, Real-Time Clock
+       ========================================= -->
+  <header class="tv-header">
+    <div class="tv-court-brand">
+      <div class="tv-emblem-box">
+        <i class="fa-solid fa-scale-balanced"></i>
+      </div>
+      <div class="tv-titles">
+        <h1 id="tvCourtTitle">ระบบนัดพิจารณาคดี • ศาลแขวงอุบลราชธานี</h1>
+        <div class="sub">
+          <span class="tv-room-badge" id="tvRoomDisplay">
+            <i class="fa-solid fa-door-open"></i> รวมทุกห้องพิจารณา
+          </span>
+          <span class="tv-date-badge" id="tvTargetDateLabel">
+            <i class="fa-regular fa-calendar-check"></i> วันนัดพิจารณาวันนี้
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Digital Clock -->
+    <div class="tv-clock-box">
+      <div class="tv-clock-time" id="tvClockTime">00:00:00</div>
+      <div class="tv-clock-date" id="tvClockDate">วันพุธที่ 21 ตุลาคม 2569</div>
+    </div>
+  </header>
+
+  <!-- =========================================
+       2. SPLIT SCREEN CONTAINER (Top: Docket / Bottom: Media)
+       ========================================= -->
+  <main class="tv-split-container" id="tvSplitContainer">
+
+    <!-- 2.1 TOP SECTION: Court Docket Slide -->
+    <section class="tv-docket-section" id="tvDocketSection">
+      <div class="tv-docket-bar">
+        <div class="left">
+          <i class="fa-solid fa-clipboard-list text-gold"></i>
+          <span>รายการนัดพิจารณาคดี</span>
+          <span class="tv-count-pill" id="tvTotalCountBadge">0 คดี</span>
+        </div>
+        <div class="right">
+          <span id="tvSlideCountdown" style="font-size: 0.8rem; opacity: 0.8;">สไลด์ถัดไปใน 10 วิ</span>
+          <span class="tv-page-indicator" id="tvPageIndicator">หน้า 1 / 1</span>
+        </div>
+      </div>
+
+      <!-- Slide Progress Bar -->
+      <div class="tv-slide-progress-track">
+        <div class="tv-slide-progress-fill" id="tvSlideProgress"></div>
+      </div>
+
+      <!-- Viewport containing animated cards page -->
+      <div class="tv-cards-viewport" id="tvCardsViewport">
+        <div class="tv-cards-page" id="tvCardsContainer">
+          <!-- Dynamically injected cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 2.2 BOTTOM SECTION: Video / Media Player -->
+    <section class="tv-media-section" id="tvMediaSection">
+      <div class="tv-media-bar">
+        <div class="title">
+          <i class="fa-solid fa-bullhorn"></i>
+          <span id="tvMediaTitle">ประชาสัมพันธ์และสาระน่ารู้ศาลยุติธรรม</span>
+        </div>
+        <div class="status-badge" id="tvMediaStatus">
+          <i class="fa-solid fa-circle-play"></i> กำลังเล่นต่อเนื่อง
+        </div>
+      </div>
+
+      <div class="tv-media-content" id="tvMediaContent">
+        <!-- 1) HTML5 Video (Direct MP4 / Local URL) -->
+        <video id="tvVideoPlayer" playsinline loop autoplay muted></video>
+
+        <!-- 2) YouTube Embed Player -->
+        <iframe id="tvYoutubeFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+        <!-- 3) Image Slideshow Container -->
+        <div id="tvImageContainer"></div>
+      </div>
+
+      <!-- News Ticker Marquee -->
+      <div class="tv-ticker-bar">
+        <div class="tv-ticker-tag">
+          <i class="fa-solid fa-circle-info"></i> ประกาศ
+        </div>
+        <div class="tv-ticker-marquee">
+          <span class="tv-ticker-text" id="tvTickerText">
+            ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์
+          </span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================
+       3. FLOATING ON-SCREEN CONTROLS
+       ========================================= -->
+  <div class="tv-floating-controls" id="tvControls">
+    <button class="tv-ctrl-btn" id="btnPrevSlide" title="หน้าก่อนหน้า"><i class="fa-solid fa-chevron-up"></i></button>
+    <button class="tv-ctrl-btn" id="btnPauseSlide" title="หยุด/เล่นสไลด์อัตโนมัติ"><i class="fa-solid fa-pause"></i></button>
+    <button class="tv-ctrl-btn" id="btnNextSlide" title="หน้าถัดไป"><i class="fa-solid fa-chevron-down"></i></button>
+    <button class="tv-ctrl-btn" id="btnFullscreen" title="เต็มจอ (F11)"><i class="fa-solid fa-expand"></i></button>
+    <button class="tv-ctrl-btn" id="btnSettings" title="ตั้งค่าจอทีวี"><i class="fa-solid fa-gear"></i></button>
+  </div>
+
+  <!-- =========================================
+       4. SETTINGS MODAL DIALOG
+       ========================================= -->
+  <div class="tv-modal-overlay" id="tvSettingsModal">
+    <div class="tv-modal-card">
+      <div class="tv-modal-header">
+        <h2><i class="fa-solid fa-sliders text-gold"></i> ตั้งค่าจอทีวีแนวตั้ง (Vertical TV Signage)</h2>
+        <button class="tv-modal-close" id="btnCloseSettings">&times;</button>
+      </div>
+
+      <div class="tv-modal-body">
+        
+        <!-- Group 1: Split & Layout -->
+        <div class="setting-group">
+          <div class="setting-group-title">
+            <i class="fa-solid fa-table-columns"></i> การจัดสัดส่วนหน้าจอแนวตั้ง
+          </div>
+          <div class="setting-row">
+            <label>สัดส่วนหน้าจอ (คดีด้านบน : วิดีโอด้านล่าง)</label>
+            <select id="cfgSplitRatio">
+              <option value="60:40">ด้านบน 60% : ด้านล่าง 40% (แนะนำมาตรฐาน)</option>
+              <option value="55:45">ด้านบน 55% : ด้านล่าง 45%</option>
+              <option value="50:50">ด้านบน 50% : ด้านล่าง 50% (แบ่งครึ่ง)</option>
+              <option value="65:35">ด้านบน 65% : ด้านล่าง 35% (เน้นคดีมาก)</option>
+              <option value="70:30">ด้านบน 70% : ด้านล่าง 30%</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>ชื่อศาล / หัวเรื่องบนจอ</label>
+            <input type="text" id="cfgCourtTitle" value="ระบบนัดพิจารณาคดี • ศาลแขวงอุบลราชธานี">
+          </div>
+        </div>
+
+        <!-- Group 2: Docket Slider Configuration -->
+        <div class="setting-group">
+          <div class="setting-group-title">
+            <i class="fa-solid fa-clock-rotate-left"></i> การเลื่อนสไลด์รายการคดี (Top Section)
+          </div>
+          <div class="setting-row">
+            <label>ระยะเวลาสลับสไลด์คดี (วินาทีต่อหน้า)</label>
+            <select id="cfgSlideInterval">
+              <option value="6">6 วินาที (เร็ว)</option>
+              <option value="8">8 วินาที</option>
+              <option value="10" selected>10 วินาที (แนะนำมาตรฐาน)</option>
+              <option value="15">15 วินาที</option>
+              <option value="20">20 วินาที (อ่านสบายๆ)</option>
+              <option value="30">30 วินาที</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>จำนวนคดีต่อหน้า (Cards per slide)</label>
+            <select id="cfgCasesPerPage">
+              <option value="3">3 คดีต่อหน้า (ตัวอักษรใหญ่พิเศษ)</option>
+              <option value="4" selected>4 คดีต่อหน้า (แนะนำ)</option>
+              <option value="5">5 คดีต่อหน้า</option>
+              <option value="6">6 คดีต่อหน้า (หน้าจอขนาดใหญ่ 4K)</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>เจาะจงเฉพาะห้องพิจารณา (กรณีติดตั้งหน้าห้องพิจารณาเฉพาะ)</label>
+            <select id="cfgRoomFilter">
+              <option value="">🏛️ รวมทุกห้องพิจารณาคดี</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>วันที่ของคดีที่ต้องการแสดง</label>
+            <select id="cfgDateFilter">
+              <option value="TODAY">วันนัดวันนี้ (ค่าเริ่มต้น)</option>
+              <option value="TOMORROW">วันนัดวันพรุ่งนี้</option>
+              <option value="ALL">รวมทุกวัน (3 วัน)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Group 3: Media Player Configuration -->
+        <div class="setting-group">
+          <div class="setting-group-title">
+            <i class="fa-solid fa-photo-film"></i> สื่อประชาสัมพันธ์ด้านล่าง (Bottom Section)
+          </div>
+          <div class="setting-row">
+            <label>ประเภทของสื่อที่ต้องการเล่น</label>
+            <select id="cfgMediaType">
+              <option value="video">ไฟล์วิดีโอ MP4 / ลิงก์ตรง (Direct Video)</option>
+              <option value="youtube">YouTube (Video / Playlist)</option>
+              <option value="images">สไลด์รูปภาพต่อเนื่อง (Image Slideshow)</option>
+            </select>
+          </div>
+          
+          <!-- MP4 Video Input -->
+          <div class="setting-row" id="groupCfgVideo">
+            <label>URL ไฟล์วิดีโอ MP4 (หากมีหลายไฟล์ให้คั่นด้วยเครื่องหมายจุลภาค ,)</label>
+            <input type="text" id="cfgVideoUrl" placeholder="https://example.com/court_intro.mp4">
+            <small style="color: #94a3b8; font-size: 0.78rem;">* สามารถใส่ลิงก์ตรงของไฟล์ .mp4 หรือไฟล์ที่โฮสต์ไว้ได้</small>
+          </div>
+
+          <!-- YouTube Input -->
+          <div class="setting-row" id="groupCfgYoutube" style="display: none;">
+            <label>YouTube Video ID หรือ Playlist ID</label>
+            <input type="text" id="cfgYoutubeId" placeholder="เช่น PLxxxxxx หรือ Video ID: dQw4w9WgXcQ">
+            <small style="color: #94a3b8; font-size: 0.78rem;">* ใส่รหัส Video ID หรือ Playlist ID (ระบบจะเล่นอัตโนมัติและวนซ้ำ)</small>
+          </div>
+
+          <!-- Image Slideshow Input -->
+          <div class="setting-row" id="groupCfgImages" style="display: none;">
+            <label>URL รูปภาพสำหรับทำสไลด์โชว์ (ใส่บรรทัดละ 1 ลิงก์)</label>
+            <textarea id="cfgImageUrls" rows="4" placeholder="https://example.com/banner1.jpg&#10;https://example.com/banner2.jpg"></textarea>
+            <div style="margin-top: 6px;">
+              <label>ระยะเวลาแสดงแต่ละรูป (วินาที)</label>
+              <input type="number" id="cfgImageInterval" min="3" max="60" value="6" style="width: 100px;">
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <label>ระบบเสียงวิดีโอ</label>
+            <select id="cfgAudioMuted">
+              <option value="true">ปิดเสียง Muted (แนะนำสำหรับโถงศาล เพื่อไม่ให้เสียงกวน)</option>
+              <option value="false">เปิดเสียง (Unmuted)</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <label>ข้อความตัววิ่งประชาสัมพันธ์ (Ticker)</label>
+            <input type="text" id="cfgTickerText" value="ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์">
+          </div>
+        </div>
+
+        <!-- Group 4: Data Connection -->
+        <div class="setting-group">
+          <div class="setting-group-title">
+            <i class="fa-solid fa-database"></i> แหล่งข้อมูลคดี (Google Apps Script / Sheet)
+          </div>
+          <div class="setting-row">
+            <label>Google Apps Script Web App URL</label>
+            <input type="text" id="cfgWebAppUrl" placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+          <div class="setting-row">
+            <label>Google Sheet ID (กรณีใช้ Google Sheet Visualization API)</label>
+            <input type="text" id="cfgSheetId" value="1XJpHN8JuWNK-EVJ1TQNWKeL0E5qLtzJgBV95cM3-tPg">
+          </div>
+          <div class="setting-row">
+            <label>รีเฟรชดึงข้อมูลใหม่จากฐานข้อมูลอัตโนมัติทุกๆ</label>
+            <select id="cfgAutoRefreshMin">
+              <option value="3">3 นาที</option>
+              <option value="5" selected>5 นาที (แนะนำ)</option>
+              <option value="10">10 นาที</option>
+              <option value="15">15 นาที</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tv-modal-footer">
+        <button class="btn-reset" id="btnResetConfig">คืนค่าเริ่มต้น</button>
+        <button class="btn-save" id="btnSaveConfig"><i class="fa-solid fa-floppy-disk"></i> บันทึกและเริ่มทำงาน</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ข้อมูลตัวอย่างเริ่มต้น (กรณีเปิดครั้งแรก หรือออฟไลน์)
+     */
+    const INITIAL_SAMPLE_CASES = [
+      {
+        fullCaseId: "อ5783/2565",
+        prosDesc: "นางสาวณิชชรีย์  บุญไทย",
+        accuDesc: "นายสุรชัย  ร้อยต๊ะ ที่ 1 ที่ 1 กับพวกรวม 4 คน",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "10.00",
+        roomName: "ห้องพิจารณาคดีที่6",
+        reasonName: "นัดสอบถามจำเลย",
+        blackTitleCaseName: "อ"
+      },
+      {
+        fullCaseId: "อ4140/2569",
+        prosDesc: "พนักงานอัยการคดีศาลแขวงอุบลราชธานี",
+        accuDesc: "นายสุระชัย ทาดาวงษา",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "09.00",
+        roomName: "ห้องพิจารณาคดีที่1",
+        reasonName: "นัดคุ้มครองสิทธิ",
+        blackTitleCaseName: "อ"
+      },
+      {
+        fullCaseId: "อ4162/2569",
+        prosDesc: "พนักงานอัยการคดีศาลแขวงอุบลราชธานี",
+        accuDesc: "นายชัยยง ยงกุลวณิช",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "09.00",
+        roomName: "ห้องพิจารณาคดีที่1",
+        reasonName: "นัดคุ้มครองสิทธิ",
+        blackTitleCaseName: "อ"
+      },
+      {
+        fullCaseId: "อ4132/2569",
+        prosDesc: "พนักงานอัยการคดีศาลแขวงอุบลราชธานี",
+        accuDesc: "นายสะอาด พุ่มพวง",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "09.00",
+        roomName: "ห้องพิจารณาคดีที่1",
+        reasonName: "นัดคุ้มครองสิทธิ",
+        blackTitleCaseName: "อ"
+      },
+      {
+        fullCaseId: "อ4051/2569",
+        prosDesc: "พนักงานอัยการคดีศาลแขวงอุบลราชธานี",
+        accuDesc: "นายสะอาด พุ่มพวง",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "09.00",
+        roomName: "ห้องพิจารณาคดีที่2",
+        reasonName: "นัดตรวจพยานหลักฐาน",
+        blackTitleCaseName: "อ"
+      },
+      {
+        fullCaseId: "อ4019/2569",
+        prosDesc: "บริษัท ที แอนด์ บี ดิสทริบิวชั่น 2562 จำกัด",
+        accuDesc: "นางสาวสุภาพร คำจริง ที่ 1 กับพวกรวม 2 คน",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "13.00",
+        roomName: "ห้องพิจารณาคดีที่5",
+        reasonName: "นัดไต่สวนมูลฟ้อง",
+        blackTitleCaseName: "อ"
+      },
+      {
+        fullCaseId: "ผบ538/2569",
+        prosDesc: "กลุ่มออมทรัพย์เพื่อการผลิต บ้านท่าเมือง",
+        accuDesc: "นายกิติพงษ์ คณะพันธ์ กับพวก",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "13.00",
+        roomName: "ห้องพิจารณาคดีที่5",
+        reasonName: "นัดไกล่เกลี่ย/ให้การ/สืบพยาน",
+        blackTitleCaseName: "ผบ"
+      },
+      {
+        fullCaseId: "ผบ537/2569",
+        prosDesc: "กลุ่มออมทรัพย์เพื่อการผลิต บ้านท่าเมือง",
+        accuDesc: "นางสาวธิดา คณะพันธ์ กับพวก",
+        appointDate: "21/10/2569 00:00:00",
+        appointTime: "13.00",
+        roomName: "ห้องพิจารณาคดีที่7",
+        reasonName: "นัดไกล่เกลี่ย/ให้การ/สืบพยาน",
+        blackTitleCaseName: "ผบ"
+      }
+    ];
+
+    // Default Banner Images if none configured
+    const DEFAULT_BANNER_IMAGES = [
+      "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1453733197781-79df3f52410a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1479142506502-19b3a3b7ff33?auto=format&fit=crop&w=1200&q=80"
+    ];
+
+    // Demo Video URL if none configured
+    const DEFAULT_VIDEO_URL = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+    /**
+     * App State & Configurations
+     */
+    let tvConfig = {
+      courtTitle: localStorage.getItem('tv_court_title') || "ระบบนัดพิจารณาคดี • ศาลแขวงอุบลราชธานี",
+      splitRatio: localStorage.getItem('tv_split_ratio') || "60:40",
+      slideInterval: parseInt(localStorage.getItem('tv_slide_interval') || "10", 10),
+      casesPerPage: parseInt(localStorage.getItem('tv_cases_per_page') || "4", 10),
+      roomFilter: localStorage.getItem('tv_room_filter') || "",
+      dateFilter: localStorage.getItem('tv_date_filter') || "TODAY",
+      
+      mediaType: localStorage.getItem('tv_media_type') || "images", // 'video', 'youtube', 'images'
+      videoUrl: localStorage.getItem('tv_video_url') || DEFAULT_VIDEO_URL,
+      youtubeId: localStorage.getItem('tv_youtube_id') || "dQw4w9WgXcQ",
+      imageUrls: localStorage.getItem('tv_image_urls') || DEFAULT_BANNER_IMAGES.join('\n'),
+      imageInterval: parseInt(localStorage.getItem('tv_image_interval') || "6", 10),
+      audioMuted: localStorage.getItem('tv_audio_muted') !== "false",
+      tickerText: localStorage.getItem('tv_ticker_text') || "ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์",
+
+      webAppUrl: localStorage.getItem('court_webapp_url') || "",
+      sheetId: localStorage.getItem('court_sheet_id') || "1XJpHN8JuWNK-EVJ1TQNWKeL0E5qLtzJgBV95cM3-tPg",
+      autoRefreshMin: parseInt(localStorage.getItem('tv_auto_refresh_min') || "5", 10)
+    };
+
+    let tvState = {
+      allCases: [],
+      filteredCases: [],
+      currentPage: 0,
+      totalPages: 1,
+      isPaused: false,
+      slideTimer: null,
+      slideProgressTimer: null,
+      slideTimeRemaining: 0,
+      autoRefreshTimer: null,
+      imageSlideshowTimer: null,
+      currentImageIndex: 0
+    };
+
+    /**
+     * Initializer
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      startClock();
+      applySplitRatio();
+      bindEvents();
+      loadData();
+      initMediaPlayer();
+      startAutoRefresh();
+    });
+
+    /**
+     * Real-time Clock (Thai BE format)
+     */
+    function startClock() {
+      const timeElem = document.getElementById('tvClockTime');
+      const dateElem = document.getElementById('tvClockDate');
+      
+      const thaiDays = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+      const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
+      function update() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        timeElem.textContent = `${hh}:${mm}:${ss}`;
+
+        const dayName = thaiDays[now.getDay()];
+        const dateNum = now.getDate();
+        const monthName = thaiMonths[now.getMonth()];
+        const yearBE = now.getFullYear() + 543;
+        dateElem.textContent = `${dayName}ที่ ${dateNum} ${monthName} ${yearBE}`;
+      }
+
+      update();
+      setInterval(update, 1000);
+    }
+
+    /**
+     * Apply Vertical Split Ratio (e.g. 60:40)
+     */
+    function applySplitRatio() {
+      const parts = tvConfig.splitRatio.split(':');
+      const topPct = parts[0] ? parseInt(parts[0], 10) : 60;
+      const bottomPct = 100 - topPct;
+
+      const docketSection = document.getElementById('tvDocketSection');
+      const mediaSection = document.getElementById('tvMediaSection');
+
+      docketSection.style.height = `${topPct}%`;
+      mediaSection.style.height = `${bottomPct}%`;
+    }
+
+    /**
+     * Load Court Docket Data (Apps Script or Google Sheets)
+     */
+    async function loadData() {
+      let loaded = false;
+
+      // 1. Try Apps Script Web App
+      if (tvConfig.webAppUrl) {
+        try {
+          const resp = await fetch(tvConfig.webAppUrl + (tvConfig.webAppUrl.includes('?') ? '&' : '?') + 'action=getData');
+          if (resp.ok) {
+            const json = await resp.json();
+            if (json && json.data && json.data.length > 0) {
+              processRawCases(json.data);
+              loaded = true;
+            }
+          }
+        } catch (e) {
+          console.warn('Apps Script Web App fetch failed:', e);
+        }
+      }
+
+      // 2. Try Google Sheets GViz API
+      if (!loaded && tvConfig.sheetId) {
+        try {
+          const gvizUrl = `https://docs.google.com/spreadsheets/d/${tvConfig.sheetId}/gviz/tq?tqx=out:json&sheet=รายการนัดพิจารณา`;
+          const resp = await fetch(gvizUrl);
+          if (resp.ok) {
+            const text = await resp.text();
+            const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/);
+            if (match && match[1]) {
+              const gvizData = JSON.parse(match[1]);
+              const rows = gvizData.table.rows;
+              if (rows && rows.length > 0) {
+                const parsed = rows.map(r => {
+                  const c = r.c;
+                  return {
+                    appointDate: c[1] ? String(c[1].v) : '',
+                    appointTime: c[2] ? String(c[2].v) : '',
+                    fullCaseId: c[4] ? String(c[4].v) : '',
+                    blackTitleCaseName: c[5] ? String(c[5].v) : '',
+                    roomName: c[6] ? String(c[6].v) : '',
+                    reasonName: c[7] ? String(c[7].v) : '',
+                    prosDesc: c[8] ? String(c[8].v) : '',
+                    accuDesc: c[9] ? String(c[9].v) : ''
+                  };
+                });
+                processRawCases(parsed);
+                loaded = true;
+              }
+            }
+          }
+        } catch (e) {
+          console.warn('Google Sheets GViz fetch failed:', e);
+        }
+      }
+
+      // 3. Fallback to Initial Sample Data
+      if (!loaded) {
+        const todayStr = getTodayThaiString() + ' 00:00:00';
+        const simulated = INITIAL_SAMPLE_CASES.map(c => ({ ...c, appointDate: todayStr }));
+        processRawCases(simulated);
+      }
+    }
+
+    function processRawCases(cases) {
+      tvState.allCases = cases;
+      populateRoomOptions(cases);
+      applyDocketFilters();
+    }
+
+    function getTodayThaiString() {
+      const now = new Date();
+      const dd = String(now.getDate()).padStart(2, '0');
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const yy = now.getFullYear() + 543;
+      return `${dd}/${mm}/${yy}`;
+    }
+
+    function populateRoomOptions(cases) {
+      const select = document.getElementById('cfgRoomFilter');
+      const rooms = new Set();
+      cases.forEach(c => {
+        if (c.roomName) rooms.add(c.roomName.trim());
+      });
+
+      const currentVal = select.value || tvConfig.roomFilter;
+      select.innerHTML = '<option value="">🏛️ รวมทุกห้องพิจารณาคดี</option>';
+      Array.from(rooms).sort().forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r;
+        opt.textContent = r;
+        select.appendChild(opt);
+      });
+      select.value = currentVal;
+    }
+
+    /**
+     * Filter Cases based on Room & Date
+     */
+    function applyDocketFilters() {
+      const todayStr = getTodayThaiString();
+      const roomVal = tvConfig.roomFilter;
+      const dateMode = tvConfig.dateFilter; // TODAY, TOMORROW, ALL
+
+      document.getElementById('tvCourtTitle').textContent = tvConfig.courtTitle;
+      document.getElementById('tvRoomDisplay').innerHTML = roomVal 
+        ? `<i class="fa-solid fa-door-open"></i> ${roomVal}` 
+        : `<i class="fa-solid fa-door-open"></i> รวมทุกห้องพิจารณา`;
+
+      document.getElementById('tvTargetDateLabel').innerHTML = dateMode === 'TODAY' 
+        ? `<i class="fa-regular fa-calendar-check"></i> วันนัดพิจารณาวันนี้ (${todayStr})` 
+        : (dateMode === 'TOMORROW' ? `<i class="fa-regular fa-calendar-plus"></i> วันนัดพิจารณาวันพรุ่งนี้` : `<i class="fa-solid fa-calendar-days"></i> วันนัดพิจารณาทั้งหมด`);
+
+      tvState.filteredCases = tvState.allCases.filter(c => {
+        // Room Filter
+        if (roomVal && c.roomName !== roomVal) return false;
+
+        // Date Filter
+        if (dateMode === 'TODAY') {
+          const cDate = (c.appointDate || '').split(' ')[0].trim();
+          if (cDate && cDate !== todayStr) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('tvTotalCountBadge').textContent = `${tvState.filteredCases.length} คดี`;
+      
+      const perPage = tvConfig.casesPerPage;
+      tvState.totalPages = Math.max(1, Math.ceil(tvState.filteredCases.length / perPage));
+      tvState.currentPage = 0;
+
+      renderCurrentPage();
+      resetSlideTimer();
+    }
+
+    /**
+     * Render One Page of Docket Cards
+     */
+    function renderCurrentPage() {
+      const container = document.getElementById('tvCardsContainer');
+      const pageIndicator = document.getElementById('tvPageIndicator');
+      container.innerHTML = '';
+
+      if (tvState.filteredCases.length === 0) {
+        container.innerHTML = `
+          <div class="tv-empty-docket">
+            <i class="fa-regular fa-folder-open"></i>
+            <h3 style="font-size: 1.2rem; color: #94a3b8;">ไม่มีรายการนัดพิจารณาคดีในเงื่อนไขนี้</h3>
+            <p style="font-size: 0.9rem;">สามารถเลือกเปลี่ยนห้องพิจารณา หรือเปลี่ยนวันที่ได้จากปุ่มตั้งค่า ⚙️</p>
+          </div>
+        `;
+        pageIndicator.textContent = "หน้า 0 / 0";
+        return;
+      }
+
+      const startIndex = tvState.currentPage * tvConfig.casesPerPage;
+      const pageCases = tvState.filteredCases.slice(startIndex, startIndex + tvConfig.casesPerPage);
+
+      pageCases.forEach((c) => {
+        const card = document.createElement('div');
+        const caseType = c.blackTitleCaseName || extractCasePrefix(c.fullCaseId);
+        const typeStyle = getCaseTypeBadge(caseType);
+        const timeBadge = getTimeBadge(c.appointTime);
+        const cardClass = getCaseCardClass(caseType);
+
+        card.className = `tv-case-card ${cardClass}`;
+        card.innerHTML = `
+          <div class="tv-card-row-top">
+            <div class="tv-badges-group">
+              ${typeStyle}
+              ${timeBadge}
+            </div>
+            <div class="tv-room-pill">
+              <i class="fa-solid fa-door-open" style="color: #60a5fa;"></i>
+              ${c.roomName || 'ไม่ระบุห้อง'}
+            </div>
+          </div>
+
+          <div class="tv-card-main">
+            <div class="tv-case-num">${c.fullCaseId || '-'}</div>
+            <div class="tv-case-reason"><i class="fa-regular fa-bookmark"></i> ${c.reasonName || 'นัดพิจารณา'}</div>
+          </div>
+
+          <div class="tv-parties-box">
+            <div class="tv-party-item">
+              <span class="lbl"><i class="fa-solid fa-user-tie"></i> โจทก์:</span>
+              <span class="name" title="${c.prosDesc || '-'}">${c.prosDesc || '-'}</span>
+            </div>
+            <div class="tv-party-item">
+              <span class="lbl"><i class="fa-solid fa-user"></i> จำเลย:</span>
+              <span class="name" title="${c.accuDesc || '-'}">${c.accuDesc || '-'}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      pageIndicator.textContent = `หน้า ${tvState.currentPage + 1} / ${tvState.totalPages}`;
+    }
+
+    /**
+     * Auto Slide Timer & Progress Bar Loop
+     */
+    function resetSlideTimer() {
+      clearInterval(tvState.slideTimer);
+      clearInterval(tvState.slideProgressTimer);
+
+      if (tvState.isPaused || tvState.totalPages <= 1) {
+        document.getElementById('tvSlideProgress').style.width = '0%';
+        document.getElementById('tvSlideCountdown').textContent = tvState.isPaused ? 'หยุดสไลด์ชั่วคราว' : '';
+        return;
+      }
+
+      const totalMs = tvConfig.slideInterval * 1000;
+      let elapsedMs = 0;
+      const progressElem = document.getElementById('tvSlideProgress');
+      const countdownElem = document.getElementById('tvSlideCountdown');
+
+      tvState.slideProgressTimer = setInterval(() => {
+        elapsedMs += 100;
+        const pct = Math.min(100, (elapsedMs / totalMs) * 100);
+        progressElem.style.width = `${pct}%`;
+
+        const secLeft = Math.ceil((totalMs - elapsedMs) / 1000);
+        countdownElem.textContent = `สไลด์ถัดไปใน ${secLeft} วิ`;
+
+        if (elapsedMs >= totalMs) {
+          clearInterval(tvState.slideProgressTimer);
+          goToNextSlide();
+        }
+      }, 100);
+    }
+
+    function goToNextSlide() {
+      if (tvState.totalPages <= 1) return;
+      tvState.currentPage = (tvState.currentPage + 1) % tvState.totalPages;
+      renderCurrentPage();
+      resetSlideTimer();
+    }
+
+    function goToPrevSlide() {
+      if (tvState.totalPages <= 1) return;
+      tvState.currentPage = (tvState.currentPage - 1 + tvState.totalPages) % tvState.totalPages;
+      renderCurrentPage();
+      resetSlideTimer();
+    }
+
+    /**
+     * Media Player Engine (Video MP4, YouTube, Image Slideshow)
+     */
+    function initMediaPlayer() {
+      const type = tvConfig.mediaType;
+      const videoElem = document.getElementById('tvVideoPlayer');
+      const ytFrame = document.getElementById('tvYoutubeFrame');
+      const imgContainer = document.getElementById('tvImageContainer');
+      const statusBadge = document.getElementById('tvMediaStatus');
+
+      // Update Ticker
+      document.getElementById('tvTickerText').textContent = tvConfig.tickerText;
+
+      // Clear any ongoing image interval
+      clearInterval(tvState.imageSlideshowTimer);
+
+      videoElem.style.display = 'none';
+      ytFrame.style.display = 'none';
+      imgContainer.style.display = 'none';
+
+      try {
+        videoElem.pause();
+      } catch (e) {}
+
+      if (type === 'video') {
+        // MP4 Video Mode
+        videoElem.style.display = 'block';
+        videoElem.src = tvConfig.videoUrl || DEFAULT_VIDEO_URL;
+        videoElem.muted = tvConfig.audioMuted;
+        videoElem.loop = true;
+        videoElem.play().catch(e => {
+          console.warn('Autoplay error, retrying muted:', e);
+          videoElem.muted = true;
+          videoElem.play().catch(() => {});
+        });
+        statusBadge.innerHTML = `<i class="fa-solid fa-play"></i> วิดีโอ MP4`;
+
+      } else if (type === 'youtube') {
+        // YouTube Embed Mode
+        ytFrame.style.display = 'block';
+        const ytId = tvConfig.youtubeId.trim();
+        const isPlaylist = ytId.startsWith('PL') || ytId.includes('list=');
+        let embedSrc = '';
+
+        if (isPlaylist) {
+          const listId = ytId.replace(/.*list=/, '');
+          embedSrc = `https://www.youtube.com/embed?listType=playlist&list=${listId}&autoplay=1&mute=${tvConfig.audioMuted ? 1 : 0}&loop=1&controls=0&modestbranding=1`;
+        } else {
+          embedSrc = `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=${tvConfig.audioMuted ? 1 : 0}&loop=1&playlist=${ytId}&controls=0&modestbranding=1`;
+        }
+        ytFrame.src = embedSrc;
+        statusBadge.innerHTML = `<i class="fa-brands fa-youtube" style="color: #ef4444;"></i> YouTube`;
+
+      } else {
+        // Image Slideshow Mode
+        imgContainer.style.display = 'block';
+        const urls = tvConfig.imageUrls.split('\n').map(u => u.trim()).filter(Boolean);
+        const imagesToUse = urls.length > 0 ? urls : DEFAULT_BANNER_IMAGES;
+
+        imgContainer.innerHTML = '';
+        imagesToUse.forEach((url, i) => {
+          const img = document.createElement('img');
+          img.className = `tv-slide-image ${i === 0 ? 'active' : ''}`;
+          img.src = url;
+          img.onerror = () => {
+            img.src = DEFAULT_BANNER_IMAGES[0];
+          };
+          imgContainer.appendChild(img);
+        });
+
+        tvState.currentImageIndex = 0;
+        const imgElems = imgContainer.querySelectorAll('.tv-slide-image');
+
+        if (imgElems.length > 1) {
+          tvState.imageSlideshowTimer = setInterval(() => {
+            imgElems[tvState.currentImageIndex].classList.remove('active');
+            tvState.currentImageIndex = (tvState.currentImageIndex + 1) % imgElems.length;
+            imgElems[tvState.currentImageIndex].classList.add('active');
+          }, tvConfig.imageInterval * 1000);
+        }
+
+        statusBadge.innerHTML = `<i class="fa-regular fa-images"></i> สไลด์รูปภาพ (${imgElems.length} รูป)`;
+      }
+    }
+
+    /**
+     * Auto Refresh Data from Backend periodically
+     */
+    function startAutoRefresh() {
+      clearInterval(tvState.autoRefreshTimer);
+      const ms = Math.max(1, tvConfig.autoRefreshMin) * 60 * 1000;
+      tvState.autoRefreshTimer = setInterval(() => {
+        console.log('TV Auto-refreshing court docket data...');
+        loadData();
+      }, ms);
+    }
+
+    /**
+     * UI Event Handlers & Settings Modal
+     */
+    function bindEvents() {
+      // Prev / Next / Pause Controls
+      document.getElementById('btnNextSlide').addEventListener('click', goToNextSlide);
+      document.getElementById('btnPrevSlide').addEventListener('click', goToPrevSlide);
+      
+      const pauseBtn = document.getElementById('btnPauseSlide');
+      pauseBtn.addEventListener('click', () => {
+        tvState.isPaused = !tvState.isPaused;
+        pauseBtn.innerHTML = tvState.isPaused ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-pause"></i>';
+        resetSlideTimer();
+      });
+
+      // Fullscreen Toggle
+      document.getElementById('btnFullscreen').addEventListener('click', toggleFullscreen);
+
+      // Keyboard shortcuts (F11, Space for pause, Arrow keys)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goToNextSlide();
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goToPrevSlide();
+        if (e.key === ' ' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          pauseBtn.click();
+        }
+        if (e.key === 's' || e.key === 'S') {
+          if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            document.getElementById('btnSettings').click();
+          }
+        }
+      });
+
+      // Settings Modal Open
+      document.getElementById('btnSettings').addEventListener('click', openSettings);
+      document.getElementById('btnCloseSettings').addEventListener('click', closeSettings);
+
+      // Media Type Switcher in Settings
+      document.getElementById('cfgMediaType').addEventListener('change', (e) => {
+        updateMediaTypeForm(e.target.value);
+      });
+
+      // Save Config
+      document.getElementById('btnSaveConfig').addEventListener('click', saveSettings);
+
+      // Reset Config
+      document.getElementById('btnResetConfig').addEventListener('click', resetSettingsToDefault);
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    function openSettings() {
+      document.getElementById('cfgSplitRatio').value = tvConfig.splitRatio;
+      document.getElementById('cfgCourtTitle').value = tvConfig.courtTitle;
+      document.getElementById('cfgSlideInterval').value = tvConfig.slideInterval;
+      document.getElementById('cfgCasesPerPage').value = tvConfig.casesPerPage;
+      document.getElementById('cfgRoomFilter').value = tvConfig.roomFilter;
+      document.getElementById('cfgDateFilter').value = tvConfig.dateFilter;
+
+      document.getElementById('cfgMediaType').value = tvConfig.mediaType;
+      document.getElementById('cfgVideoUrl').value = tvConfig.videoUrl;
+      document.getElementById('cfgYoutubeId').value = tvConfig.youtubeId;
+      document.getElementById('cfgImageUrls').value = tvConfig.imageUrls;
+      document.getElementById('cfgImageInterval').value = tvConfig.imageInterval;
+      document.getElementById('cfgAudioMuted').value = String(tvConfig.audioMuted);
+      document.getElementById('cfgTickerText').value = tvConfig.tickerText;
+
+      document.getElementById('cfgWebAppUrl').value = tvConfig.webAppUrl;
+      document.getElementById('cfgSheetId').value = tvConfig.sheetId;
+      document.getElementById('cfgAutoRefreshMin').value = tvConfig.autoRefreshMin;
+
+      updateMediaTypeForm(tvConfig.mediaType);
+      document.getElementById('tvSettingsModal').style.display = 'flex';
+    }
+
+    function closeSettings() {
+      document.getElementById('tvSettingsModal').style.display = 'none';
+    }
+
+    function updateMediaTypeForm(type) {
+      document.getElementById('groupCfgVideo').style.display = (type === 'video') ? 'flex' : 'none';
+      document.getElementById('groupCfgYoutube').style.display = (type === 'youtube') ? 'flex' : 'none';
+      document.getElementById('groupCfgImages').style.display = (type === 'images') ? 'flex' : 'none';
+    }
+
+    function saveSettings() {
+      tvConfig.splitRatio = document.getElementById('cfgSplitRatio').value;
+      tvConfig.courtTitle = document.getElementById('cfgCourtTitle').value.trim() || "ระบบนัดพิจารณาคดี • ศาลแขวงอุบลราชธานี";
+      tvConfig.slideInterval = parseInt(document.getElementById('cfgSlideInterval').value, 10);
+      tvConfig.casesPerPage = parseInt(document.getElementById('cfgCasesPerPage').value, 10);
+      tvConfig.roomFilter = document.getElementById('cfgRoomFilter').value;
+      tvConfig.dateFilter = document.getElementById('cfgDateFilter').value;
+
+      tvConfig.mediaType = document.getElementById('cfgMediaType').value;
+      tvConfig.videoUrl = document.getElementById('cfgVideoUrl').value.trim();
+      tvConfig.youtubeId = document.getElementById('cfgYoutubeId').value.trim();
+      tvConfig.imageUrls = document.getElementById('cfgImageUrls').value.trim();
+      tvConfig.imageInterval = parseInt(document.getElementById('cfgImageInterval').value, 10) || 6;
+      tvConfig.audioMuted = document.getElementById('cfgAudioMuted').value === "true";
+      tvConfig.tickerText = document.getElementById('cfgTickerText').value.trim();
+
+      tvConfig.webAppUrl = document.getElementById('cfgWebAppUrl').value.trim();
+      tvConfig.sheetId = document.getElementById('cfgSheetId').value.trim();
+      tvConfig.autoRefreshMin = parseInt(document.getElementById('cfgAutoRefreshMin').value, 10) || 5;
+
+      // Save to localStorage
+      localStorage.setItem('tv_split_ratio', tvConfig.splitRatio);
+      localStorage.setItem('tv_court_title', tvConfig.courtTitle);
+      localStorage.setItem('tv_slide_interval', tvConfig.slideInterval);
+      localStorage.setItem('tv_cases_per_page', tvConfig.casesPerPage);
+      localStorage.setItem('tv_room_filter', tvConfig.roomFilter);
+      localStorage.setItem('tv_date_filter', tvConfig.dateFilter);
+
+      localStorage.setItem('tv_media_type', tvConfig.mediaType);
+      localStorage.setItem('tv_video_url', tvConfig.videoUrl);
+      localStorage.setItem('tv_youtube_id', tvConfig.youtubeId);
+      localStorage.setItem('tv_image_urls', tvConfig.imageUrls);
+      localStorage.setItem('tv_image_interval', tvConfig.imageInterval);
+      localStorage.setItem('tv_audio_muted', tvConfig.audioMuted);
+      localStorage.setItem('tv_ticker_text', tvConfig.tickerText);
+
+      localStorage.setItem('court_webapp_url', tvConfig.webAppUrl);
+      localStorage.setItem('court_sheet_id', tvConfig.sheetId);
+      localStorage.setItem('tv_auto_refresh_min', tvConfig.autoRefreshMin);
+
+      closeSettings();
+
+      // Apply changes immediately
+      applySplitRatio();
+      applyDocketFilters();
+      initMediaPlayer();
+      startAutoRefresh();
+    }
+
+    function resetSettingsToDefault() {
+      if (confirm('คุณต้องการคืนค่าการตั้งค่าหน้าจอทั้งหมดกลับสู่ค่าเริ่มต้นหรือไม่?')) {
+        localStorage.removeItem('tv_split_ratio');
+        localStorage.removeItem('tv_court_title');
+        localStorage.removeItem('tv_slide_interval');
+        localStorage.removeItem('tv_cases_per_page');
+        localStorage.removeItem('tv_room_filter');
+        localStorage.removeItem('tv_date_filter');
+        localStorage.removeItem('tv_media_type');
+        localStorage.removeItem('tv_video_url');
+        localStorage.removeItem('tv_youtube_id');
+        localStorage.removeItem('tv_image_urls');
+        localStorage.removeItem('tv_image_interval');
+        localStorage.removeItem('tv_audio_muted');
+        localStorage.removeItem('tv_ticker_text');
+        location.reload();
+      }
+    }
+
+    /**
+     * Helpers for Case Badges and Formatting
+     */
+    function extractCasePrefix(fullId) {
+      if (!fullId) return '';
+      const match = fullId.match(/^[^\d]+/);
+      return match ? match[0] : '';
+    }
+
+    function getCaseTypeBadge(prefix) {
+      if (['อ', 'อบ', 'อท', 'อย'].includes(prefix)) {
+        return `<span class="badge-case-type" style="background: rgba(220, 38, 38, 0.25); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.5);"><i class="fa-solid fa-shield-halved"></i> อาญา</span>`;
+      } else if (['ผบ', 'ผช'].includes(prefix)) {
+        return `<span class="badge-case-type" style="background: rgba(37, 99, 235, 0.25); color: #93c5fd; border: 1px solid rgba(37, 99, 235, 0.5);"><i class="fa-solid fa-file-contract"></i> ผู้บริโภค</span>`;
+      } else if (['พ', 'พณ'].includes(prefix)) {
+        return `<span class="badge-case-type" style="background: rgba(147, 51, 234, 0.25); color: #d8b4fe; border: 1px solid rgba(147, 51, 234, 0.5);"><i class="fa-solid fa-gavel"></i> แพ่ง</span>`;
+      }
+      return `<span class="badge-case-type" style="background: rgba(13, 148, 136, 0.25); color: #5eead4; border: 1px solid rgba(13, 148, 136, 0.5);"><i class="fa-solid fa-scale-balanced"></i> จัดการพิเศษ</span>`;
+    }
+
+    function getCaseCardClass(prefix) {
+      if (['อ', 'อบ', 'อท', 'อย'].includes(prefix)) return 'type-criminal';
+      if (['ผบ', 'ผช'].includes(prefix)) return 'type-consumer';
+      if (['พ', 'พณ'].includes(prefix)) return 'type-civil';
+      return 'type-special';
+    }
+
+    function getTimeBadge(timeStr) {
+      if (!timeStr) return '';
+      const timeNum = parseFloat(timeStr.replace(':', '.'));
+      const formatted = timeStr.replace('.', ':') + ' น.';
+      if (timeNum < 12.00) {
+        return `<span class="badge-time-slot badge-morning"><i class="fa-solid fa-sun"></i> รอบเช้า ${formatted}</span>`;
+      }
+      return `<span class="badge-time-slot badge-afternoon"><i class="fa-solid fa-cloud-sun"></i> รอบบ่าย ${formatted}</span>`;
+    }
+  </script>
+</body>
+</html>
