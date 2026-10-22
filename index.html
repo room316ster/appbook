@@ -117,7 +117,7 @@
       min-height: 100vh;
       line-height: 1.5;
       transition: background-color 0.25s ease, color 0.25s ease;
-      padding-bottom: 70px;
+      padding-bottom: 0;
     }
 
     /* Header Bar */
@@ -807,9 +807,420 @@
       opacity: 0.4;
     }
 
+    /* =========================================
+       Footer & Visitor Counter Styles
+       ========================================= */
+    .app-footer {
+      margin-top: 50px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      position: relative;
+      box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.04);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .app-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 30%, #f59e0b 70%, #10b981 100%);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 24px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1.05fr 0.95fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-heading {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+      margin-bottom: 2px;
+    }
+
+    body.dark-mode .footer-heading {
+      color: var(--primary-light);
+    }
+
+    /* Column 1: Brand */
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-emblem {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #fbbf24;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      flex-shrink: 0;
+    }
+
+    .footer-brand-text h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .footer-brand-text span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .footer-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .footer-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-tag {
+      font-size: 0.75rem;
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Column 2: Developer Card */
+    .dev-card {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .dev-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    .dev-avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+      position: relative;
+    }
+
+    .dev-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border: 2px solid var(--bg-card);
+      border-radius: 50%;
+    }
+
+    .dev-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+
+    .dev-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary-light);
+    }
+
+    .dev-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .dev-role {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .dev-dept {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.35;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .system-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 8px;
+      width: fit-content;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulseGreen 2s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    /* Column 3: Visitor Counter Card */
+    .counter-card {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .counter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .counter-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-pill {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulseGreen 1.5s infinite;
+    }
+
+    .counter-display {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .odometer-box {
+      font-size: 1.9rem;
+      font-weight: 800;
+      font-family: 'Prompt', monospace, sans-serif;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+      background: linear-gradient(135deg, #1e3a8a, #2563eb 50%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+      min-height: 34px;
+    }
+
+    body.dark-mode .odometer-box {
+      background: linear-gradient(135deg, #60a5fa, #93c5fd 50%, #fde047 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .counter-unit {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .counter-sub-stats {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.76rem;
+    }
+
+    .sub-stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sub-stat-label {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sub-stat-value {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.9rem;
+    }
+
+    .online-text {
+      color: #10b981;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sub-stat-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-color);
+    }
+
+    /* Footer Bottom Bar */
+    .footer-bottom {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .btn-back-to-top {
+      padding: 8px 14px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-back-to-top:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 960px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
     /* Print styling */
     @media print {
-      header, .date-tabs-container, .controls-panel, .legend-bar, .header-actions, .stats-row {
+      header, .date-tabs-container, .controls-panel, .legend-bar, .header-actions, .stats-row, .app-footer, .btn-back-to-top {
         display: none !important;
       }
       body {
@@ -1030,6 +1441,101 @@
     </div>
 
   </div>
+
+  <!-- =========================================
+       APP FOOTER: Developer Credit & Visitor Counter
+       ========================================= -->
+  <footer class="app-footer" id="appFooter">
+    <div class="footer-container">
+      <div class="footer-grid">
+        
+        <!-- Column 1: Organization & Identity -->
+        <div class="footer-col col-brand">
+          <div class="footer-logo">
+            <div class="footer-emblem">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="footer-brand-text">
+              <h3>ศาลแขวงอุบลราชธานี</h3>
+              <span>สำนักอำนวยการประจำศาลแขวงอุบลราชธานี</span>
+            </div>
+          </div>
+          <p class="footer-desc">
+            ระบบตรวจสอบวันนัดพิจารณาคดีล่วงหน้า 3 วัน สำหรับประชาชน ทนายความ และคู่ความ เพื่อความสะดวกรวดเร็วในการติดต่อราชการศาลยุติธรรม
+          </p>
+          <div class="footer-tags">
+            <span class="footer-tag"><i class="fa-solid fa-shield-halved"></i> Smart Court</span>
+            <span class="footer-tag"><i class="fa-solid fa-bolt"></i> บริการประชาชน</span>
+            <span class="footer-tag"><i class="fa-solid fa-mobile-screen"></i> PWA & TV Signage</span>
+          </div>
+        </div>
+
+        <!-- Column 2: Developer Credit (Exact prompt specification) -->
+        <div class="footer-col col-dev">
+          <h4 class="footer-heading"><i class="fa-solid fa-laptop-code"></i> ผู้พัฒนาและดูแลระบบ</h4>
+          <div class="dev-card">
+            <div class="dev-avatar">
+              <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <div class="dev-details">
+              <div class="dev-label">ผู้พัฒนาโปรแกรม</div>
+              <div class="dev-name">นายวีระยุทธ ประชุมรักษ์</div>
+              <div class="dev-role">พนักงานคอมพิวเตอร์</div>
+              <div class="dev-dept">
+                <i class="fa-solid fa-network-wired"></i> ศาลแขวงอุบลราชธานี กลุ่มงานเทคโนโลยีสารสนเทศ
+              </div>
+            </div>
+          </div>
+          <div class="system-status-indicator">
+            <span class="pulse-dot"></span>
+            <span>ระบบพร้อมให้บริการ • ข้อมูลอัปเดตอัตโนมัติ</span>
+          </div>
+        </div>
+
+        <!-- Column 3: Visitor Counter & Statistics -->
+        <div class="footer-col col-stats">
+          <h4 class="footer-heading"><i class="fa-solid fa-chart-line"></i> สถิติการเข้าชมระบบ</h4>
+          
+          <div class="counter-card">
+            <div class="counter-header">
+              <span class="counter-title"><i class="fa-solid fa-users"></i> จำนวนผู้เข้าชมทั้งหมด</span>
+              <span class="live-pill"><span class="live-dot"></span> ออนไลน์</span>
+            </div>
+            
+            <div class="counter-display">
+              <div class="odometer-box" id="visitorCountTotal">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.3rem;"></i>
+              </div>
+              <span class="counter-unit">ครั้ง</span>
+            </div>
+
+            <div class="counter-sub-stats">
+              <div class="sub-stat-item">
+                <span class="sub-stat-label"><i class="fa-regular fa-calendar-check"></i> ผู้เข้าชมวันนี้</span>
+                <span class="sub-stat-value" id="visitorCountToday">-</span>
+              </div>
+              <div class="sub-stat-divider"></div>
+              <div class="sub-stat-item">
+                <span class="sub-stat-label"><i class="fa-solid fa-signal"></i> สถานะเซิร์ฟเวอร์</span>
+                <span class="sub-stat-value online-text"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          <i class="fa-regular fa-copyright"></i> 2567-2569 <strong>ศาลแขวงอุบลราชธานี</strong> • พัฒนาโดย นายวีระยุทธ ประชุมรักษ์ พนักงานคอมพิวเตอร์ ศาลแขวงอุบลราชธานี กลุ่มงานเทคโนโลยีสารสนเทศ
+        </div>
+        <button class="btn-back-to-top" id="btnBackToTop" title="กลับสู่ด้านบน">
+          <i class="fa-solid fa-chevron-up"></i> กลับสู่ด้านบน
+        </button>
+      </div>
+    </div>
+  </footer>
 
   <!-- Modal: Case Detail & Voice Announcement -->
   <div class="modal-overlay" id="detailModal">
@@ -1310,6 +1816,7 @@
       setupTheme();
       computeTargetDates();
       bindEvents();
+      initVisitorCounter();
       loadData();
     });
 
@@ -1416,6 +1923,11 @@
             if (json && json.data && json.data.length > 0) {
               processRawCases(json.data);
               appState.lastUpdated = json.lastUpdated || formatNowTime();
+              if (json.visitorStats) {
+                updateVisitorCountFromBackend(json.visitorStats.total, json.visitorStats.today);
+              } else if (json.visitorCount) {
+                updateVisitorCountFromBackend(json.visitorCount);
+              }
               loaded = true;
             }
           }
@@ -1880,6 +2392,14 @@
         document.getElementById('apkModal').style.display = 'none';
       });
 
+      // Back to Top button
+      const btnBackToTop = document.getElementById('btnBackToTop');
+      if (btnBackToTop) {
+        btnBackToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
       // Close modals when clicking outside
       window.addEventListener('click', (e) => {
         if (e.target.classList.contains('modal-overlay')) {
@@ -1908,6 +2428,144 @@
           toggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
         }
       });
+    }
+
+    // =========================================
+    // Real Visitor Counter Engine (ระบบนับจำนวนผู้เข้าชมจริง 100%)
+    // =========================================
+    const VISITOR_CONFIG = {
+      COUNTER_KEY_TOTAL: 'ubmc_court_schedule_total',
+      COUNTER_KEY_TODAY_PREFIX: 'ubmc_court_today_',
+      STORAGE_TOTAL: 'court_visitor_total',
+      STORAGE_TODAY: 'court_visitor_today',
+      STORAGE_DATE: 'court_visitor_date',
+      SESSION_FLAG: 'court_visited_session'
+    };
+
+    async function initVisitorCounter() {
+      const elTotal = document.getElementById('visitorCountTotal');
+      const elToday = document.getElementById('visitorCountToday');
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const lastRecordedDate = localStorage.getItem(VISITOR_CONFIG.STORAGE_DATE) || '';
+
+      let storedTotal = parseInt(localStorage.getItem(VISITOR_CONFIG.STORAGE_TOTAL) || '0', 10);
+      let storedToday = parseInt(localStorage.getItem(VISITOR_CONFIG.STORAGE_TODAY) || '0', 10);
+
+      // วันใหม่: รีเซ็ตจำนวนผู้เข้าชมวันนี้เพื่อเริ่มนับจริงตามวัน
+      if (lastRecordedDate !== todayStr) {
+        storedToday = 0;
+        localStorage.setItem(VISITOR_CONFIG.STORAGE_DATE, todayStr);
+        localStorage.setItem(VISITOR_CONFIG.STORAGE_TODAY, '0');
+      }
+
+      // นับแบบ Unique Browser Session: 1 ครั้งต่อ 1 เซสชันการเปิดใช้งาน เพื่อไม่นับซ้ำจากการกด F5 รัวๆ
+      const isCountedThisSession = sessionStorage.getItem(VISITOR_CONFIG.SESSION_FLAG);
+      if (!isCountedThisSession) {
+        storedTotal += 1;
+        storedToday += 1;
+        localStorage.setItem(VISITOR_CONFIG.STORAGE_TOTAL, storedTotal.toString());
+        localStorage.setItem(VISITOR_CONFIG.STORAGE_TODAY, storedToday.toString());
+        sessionStorage.setItem(VISITOR_CONFIG.SESSION_FLAG, 'true');
+      }
+
+      // แสดงค่าที่มีทันที
+      animateNumber(elTotal, Math.max(0, storedTotal - 1), storedTotal, 700);
+      if (elToday) animateNumber(elToday, Math.max(0, storedToday - 1), storedToday, 600);
+
+      // 1. ดึงและบันทึกสถิติจริงจาก Cloud CountAPI (ทั้งยอดรวมทั้งหมด และยอดประจำวันจริง)
+      try {
+        const todayKey = VISITOR_CONFIG.COUNTER_KEY_TODAY_PREFIX + todayStr;
+        const totalEndpoint = !isCountedThisSession
+          ? `https://countapi.mileshilliard.com/api/v1/hit/${VISITOR_CONFIG.COUNTER_KEY_TOTAL}`
+          : `https://countapi.mileshilliard.com/api/v1/get/${VISITOR_CONFIG.COUNTER_KEY_TOTAL}`;
+
+        const todayEndpoint = !isCountedThisSession
+          ? `https://countapi.mileshilliard.com/api/v1/hit/${todayKey}`
+          : `https://countapi.mileshilliard.com/api/v1/get/${todayKey}`;
+
+        // ดึงยอดรวมจริง
+        const respTotal = await fetch(totalEndpoint, { cache: 'no-store' });
+        if (respTotal.ok) {
+          const jsonTotal = await respTotal.json();
+          if (jsonTotal && typeof jsonTotal.value !== 'undefined') {
+            const apiTotal = parseInt(jsonTotal.value, 10);
+            localStorage.setItem(VISITOR_CONFIG.STORAGE_TOTAL, apiTotal.toString());
+            animateNumber(elTotal, storedTotal, apiTotal, 600);
+            storedTotal = apiTotal;
+          }
+        }
+
+        // ดึงยอดประจำวันจริง
+        const respToday = await fetch(todayEndpoint, { cache: 'no-store' });
+        if (respToday.ok) {
+          const jsonToday = await respToday.json();
+          if (jsonToday && typeof jsonToday.value !== 'undefined') {
+            const apiToday = parseInt(jsonToday.value, 10);
+            localStorage.setItem(VISITOR_CONFIG.STORAGE_TODAY, apiToday.toString());
+            if (elToday) animateNumber(elToday, storedToday, apiToday, 600);
+          }
+        }
+      } catch (err) {
+        console.log('Online real counter note: using cached counter.');
+      }
+
+      // 2. ถ้าตั้งค่า Google Apps Script Web App ให้ซิงค์สถิติจริงกับ Google Sheet ด้วย
+      if (appState.webAppUrl) {
+        try {
+          const actionParam = !isCountedThisSession ? 'action=visit' : 'action=getVisitorStats';
+          const resp = await fetch(`${appState.webAppUrl}${appState.webAppUrl.includes('?') ? '&' : '?'}${actionParam}`);
+          if (resp.ok) {
+            const json = await resp.json();
+            if (json && (json.total || json.visitorCount)) {
+              updateVisitorCountFromBackend(json.total || json.visitorCount, json.today);
+            }
+          }
+        } catch (e) {}
+      }
+    }
+
+    function updateVisitorCountFromBackend(total, today) {
+      if (total && !isNaN(total)) {
+        const elTotal = document.getElementById('visitorCountTotal');
+        const cur = parseInt(localStorage.getItem(VISITOR_CONFIG.STORAGE_TOTAL) || '0', 10);
+        localStorage.setItem(VISITOR_CONFIG.STORAGE_TOTAL, total.toString());
+        animateNumber(elTotal, cur, total, 600);
+      }
+      if (today && !isNaN(today)) {
+        const elToday = document.getElementById('visitorCountToday');
+        if (elToday) {
+          const curToday = parseInt(localStorage.getItem(VISITOR_CONFIG.STORAGE_TODAY) || '0', 10);
+          localStorage.setItem(VISITOR_CONFIG.STORAGE_TODAY, today.toString());
+          animateNumber(elToday, curToday, today, 600);
+        }
+      }
+    }
+
+    function animateNumber(el, start, end, duration = 1000) {
+      if (!el) return;
+      if (start >= end) {
+        el.textContent = end.toLocaleString('th-TH');
+        return;
+      }
+      const startTime = performance.now();
+      const change = end - start;
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease Out Cubic
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + change * ease);
+        el.textContent = current.toLocaleString('th-TH');
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = end.toLocaleString('th-TH');
+        }
+      }
+      requestAnimationFrame(step);
     }
   </script>
 </body>

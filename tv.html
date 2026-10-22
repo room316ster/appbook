@@ -146,6 +146,19 @@
       font-size: 0.85rem;
     }
 
+    .tv-visitor-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(59, 130, 246, 0.18);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
     .tv-clock-box {
       display: flex;
       flex-direction: column;
@@ -262,23 +275,28 @@
     /* Docket Cards Slide Frame */
     .tv-cards-viewport {
       flex: 1;
-      padding: 16px 20px;
-      overflow-y: hidden;
+      padding: clamp(6px, 1.2vh, 16px) clamp(10px, 1.5vw, 20px);
+      overflow: hidden;
       position: relative;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .tv-cards-page {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      grid-template-rows: repeat(var(--cards-count, 4), minmax(0, 1fr));
+      gap: clamp(6px, 1vh, 12px);
       height: 100%;
-      animation: fadeInSlide 0.55s ease-out;
+      width: 100%;
+      min-height: 0;
+      animation: fadeInSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes fadeInSlide {
       0% {
         opacity: 0;
-        transform: translateY(14px) scale(0.99);
+        transform: translateY(10px) scale(0.99);
       }
       100% {
         opacity: 1;
@@ -286,21 +304,22 @@
       }
     }
 
-    /* Individual Case Card for TV */
+    /* Individual Case Card for TV (Compact, 2-Level Grid, Zero Overlap) */
     .tv-case-card {
       background: var(--tv-card-bg);
       border: 1.5px solid var(--tv-card-border);
       border-left: 6px solid #3b82f6;
-      border-radius: 14px;
-      padding: 14px 18px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      border-radius: 12px;
+      padding: clamp(6px, 1vh, 12px) clamp(10px, 1.4vw, 16px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      flex: 1;
+      justify-content: space-evenly;
+      gap: clamp(4px, 0.6vh, 8px);
+      overflow: hidden;
       min-height: 0;
-      justify-content: center;
-      transition: border-color 0.2s ease, transform 0.2s ease;
+      position: relative;
+      transition: border-color 0.2s ease;
     }
 
     .tv-case-card.type-criminal {
@@ -323,38 +342,55 @@
       background: linear-gradient(90deg, rgba(4, 47, 46, 0.45) 0%, rgba(17, 28, 52, 0.95) 40%);
     }
 
+    /* Row 1: Case No, Badges, Room, Reason */
     .tv-card-row-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: nowrap;
+      min-height: 0;
     }
 
-    .tv-badges-group {
+    .tv-card-left-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: clamp(6px, 1vw, 10px);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .tv-case-num {
+      font-size: clamp(1.1rem, 2vh, 1.45rem);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
 
     .badge-case-type {
-      font-size: 0.8rem;
+      font-size: clamp(0.72rem, 1vh, 0.82rem);
       font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 5px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .badge-time-slot {
-      font-size: 0.82rem;
+      font-size: clamp(0.72rem, 1vh, 0.82rem);
       font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 5px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .badge-morning {
@@ -369,72 +405,77 @@
       border: 1px solid rgba(2, 132, 199, 0.5);
     }
 
+    .tv-card-right-meta {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 1vw, 10px);
+      flex-shrink: 0;
+    }
+
     .tv-room-pill {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      color: #93c5fd;
+      padding: 2px 10px;
+      border-radius: 6px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: clamp(0.82rem, 1.1vh, 0.95rem);
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .tv-card-main {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .tv-case-num {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -0.2px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      gap: 5px;
+      white-space: nowrap;
     }
 
     .tv-case-reason {
-      font-size: 0.98rem;
+      font-size: clamp(0.8rem, 1.1vh, 0.92rem);
       color: #fbbf24;
       font-weight: 600;
       background: rgba(251, 191, 36, 0.12);
-      padding: 3px 10px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 5px;
       border: 1px dashed rgba(251, 191, 36, 0.35);
-    }
-
-    .tv-parties-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 8px;
-      padding: 6px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .tv-party-item {
-      font-size: 0.88rem;
-      line-height: 1.3;
       white-space: nowrap;
+      max-width: 180px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
+    /* Row 2: Parties Box (2 columns) */
+    .tv-parties-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(6px, 1vw, 12px);
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 6px;
+      padding: clamp(4px, 0.8vh, 6px) clamp(8px, 1vw, 12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      min-height: 0;
+    }
+
+    .tv-party-item {
+      font-size: clamp(0.78rem, 1.15vh, 0.9rem);
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+    }
+
     .tv-party-item .lbl {
       color: #94a3b8;
-      font-size: 0.76rem;
+      font-size: clamp(0.72rem, 1vh, 0.8rem);
       margin-right: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .tv-party-item .name {
       color: #f1f5f9;
       font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     /* Empty Docket State */
@@ -812,6 +853,9 @@
           <span class="tv-date-badge" id="tvTargetDateLabel">
             <i class="fa-regular fa-calendar-check"></i> วันนัดพิจารณาวันนี้
           </span>
+          <span class="tv-visitor-badge" id="tvVisitorBadge" title="จำนวนผู้เข้าชมระบบ">
+            <i class="fa-solid fa-users text-gold"></i> ผู้เข้าชม <span id="tvVisitorCountTotal">...</span> ครั้ง
+          </span>
         </div>
       </div>
     </div>
@@ -1026,7 +1070,7 @@
 
           <div class="setting-row">
             <label>ข้อความตัววิ่งประชาสัมพันธ์ (Ticker)</label>
-            <input type="text" id="cfgTickerText" value="ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์">
+            <input type="text" id="cfgTickerText" value="ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • พัฒนาโดย นายวีระยุทธ ประชุมรักษ์ พนักงานคอมพิวเตอร์ ศาลแขวงอุบลราชธานี กลุ่มงานเทคโนโลยีสารสนเทศ • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์">
           </div>
         </div>
 
@@ -1054,6 +1098,10 @@
           </div>
         </div>
 
+      </div>
+
+      <div style="padding: 10px 20px; font-size: 0.8rem; color: #94a3b8; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.5);">
+        <i class="fa-solid fa-laptop-code text-gold"></i> พัฒนาโดย <strong>นายวีระยุทธ ประชุมรักษ์</strong> พนักงานคอมพิวเตอร์ ศาลแขวงอุบลราชธานี กลุ่มงานเทคโนโลยีสารสนเทศ
       </div>
 
       <div class="tv-modal-footer">
@@ -1177,7 +1225,7 @@
       imageUrls: localStorage.getItem('tv_image_urls') || DEFAULT_BANNER_IMAGES.join('\n'),
       imageInterval: parseInt(localStorage.getItem('tv_image_interval') || "6", 10),
       audioMuted: localStorage.getItem('tv_audio_muted') !== "false",
-      tickerText: localStorage.getItem('tv_ticker_text') || "ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์",
+      tickerText: localStorage.getItem('tv_ticker_text') || "ยินดีต้อนรับสู่ศาลแขวงอุบลราชธานี • กรุณาตรวจสอบห้องพิจารณาคดีและลำดับที่นัดหมายของท่าน • พัฒนาโดย นายวีระยุทธ ประชุมรักษ์ พนักงานคอมพิวเตอร์ ศาลแขวงอุบลราชธานี กลุ่มงานเทคโนโลยีสารสนเทศ • ติดต่อสอบถามเพิ่มเติมได้ที่ศูนย์บริการประชาชนและประชาสัมพันธ์",
 
       webAppUrl: localStorage.getItem('court_webapp_url') || "",
       sheetId: localStorage.getItem('court_sheet_id') || "1XJpHN8JuWNK-EVJ1TQNWKeL0E5qLtzJgBV95cM3-tPg",
@@ -1208,6 +1256,7 @@
       loadData();
       initMediaPlayer();
       startAutoRefresh();
+      initTvVisitorCounter();
     });
 
     /**
@@ -1413,6 +1462,8 @@
       const startIndex = tvState.currentPage * tvConfig.casesPerPage;
       const pageCases = tvState.filteredCases.slice(startIndex, startIndex + tvConfig.casesPerPage);
 
+      container.style.setProperty('--cards-count', pageCases.length);
+
       pageCases.forEach((c) => {
         const card = document.createElement('div');
         const caseType = c.blackTitleCaseName || extractCasePrefix(c.fullCaseId);
@@ -1423,19 +1474,20 @@
         card.className = `tv-case-card ${cardClass}`;
         card.innerHTML = `
           <div class="tv-card-row-top">
-            <div class="tv-badges-group">
+            <div class="tv-card-left-meta">
+              <span class="tv-case-num">${c.fullCaseId || '-'}</span>
               ${typeStyle}
               ${timeBadge}
             </div>
-            <div class="tv-room-pill">
-              <i class="fa-solid fa-door-open" style="color: #60a5fa;"></i>
-              ${c.roomName || 'ไม่ระบุห้อง'}
+            <div class="tv-card-right-meta">
+              <div class="tv-room-pill">
+                <i class="fa-solid fa-door-open" style="color: #60a5fa;"></i>
+                ${c.roomName || 'ไม่ระบุห้อง'}
+              </div>
+              <div class="tv-case-reason" title="${c.reasonName || 'นัดพิจารณา'}">
+                <i class="fa-regular fa-bookmark"></i> ${c.reasonName || 'นัดพิจารณา'}
+              </div>
             </div>
-          </div>
-
-          <div class="tv-card-main">
-            <div class="tv-case-num">${c.fullCaseId || '-'}</div>
-            <div class="tv-case-reason"><i class="fa-regular fa-bookmark"></i> ${c.reasonName || 'นัดพิจารณา'}</div>
           </div>
 
           <div class="tv-parties-box">
@@ -1794,6 +1846,29 @@
         return `<span class="badge-time-slot badge-morning"><i class="fa-solid fa-sun"></i> รอบเช้า ${formatted}</span>`;
       }
       return `<span class="badge-time-slot badge-afternoon"><i class="fa-solid fa-cloud-sun"></i> รอบบ่าย ${formatted}</span>`;
+    }
+
+    // Real Visitor Counter Sync for TV (100% Real)
+    async function initTvVisitorCounter() {
+      const el = document.getElementById('tvVisitorCountTotal');
+      if (!el) return;
+
+      const cachedTotal = parseInt(localStorage.getItem('court_visitor_total') || '1', 10);
+      el.textContent = cachedTotal.toLocaleString('th-TH');
+
+      try {
+        const resp = await fetch('https://countapi.mileshilliard.com/api/v1/get/ubmc_court_schedule_total');
+        if (resp.ok) {
+          const json = await resp.json();
+          if (json && typeof json.value !== 'undefined') {
+            const apiTotal = parseInt(json.value, 10);
+            localStorage.setItem('court_visitor_total', apiTotal.toString());
+            el.textContent = apiTotal.toLocaleString('th-TH');
+          }
+        }
+      } catch (e) {
+        console.log('TV visitor counter cached fallback used');
+      }
     }
   </script>
 </body>
